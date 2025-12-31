@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+  --page-bg:
+    radial-gradient(circle at 20% 20%, rgba(79, 70, 229, 0.08), transparent 22%),
+    radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.12), transparent 22%),
+    linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+  --text-primary: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #94a3b8;
+  --panel-bg: #ffffff;
+  --panel-strong: #f8fafc;
+  --panel-border: #e2e8f0;
+  --chip-bg: #eef2ff;
+  --chip-border: #e2e8f0;
+  --hover-bg: rgba(15, 23, 42, 0.06);
+  --ghost-bg: rgba(15, 23, 42, 0.04);
+  --shadow-strong: 0 20px 60px rgba(15, 23, 42, 0.08);
+  --shadow-soft: 0 10px 40px rgba(15, 23, 42, 0.05);
+}
+
+[data-theme='dark'] {
+  --page-bg:
+    radial-gradient(circle at 20% 20%, rgba(79, 70, 229, 0.15), transparent 25%),
+    radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.2), transparent 25%),
+    linear-gradient(180deg, #0b1021 0%, #0f172a 100%);
+  --text-primary: #f8fafc;
+  --text-muted: #cbd5e1;
+  --text-dim: #94a3b8;
+  --panel-bg: rgba(255, 255, 255, 0.03);
+  --panel-strong: rgba(255, 255, 255, 0.04);
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --chip-bg: rgba(255, 255, 255, 0.05);
+  --chip-border: rgba(255, 255, 255, 0.08);
+  --hover-bg: rgba(255, 255, 255, 0.06);
+  --ghost-bg: rgba(255, 255, 255, 0.04);
+  --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.25);
+  --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+  background: var(--page-bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
