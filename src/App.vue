@@ -115,6 +115,7 @@ const experience = [
 
 const activeSection = ref('hero')
 const theme = ref('light')
+const isLoading = ref(true)
 let observer
 let typedInstance = null
 const typedElement = ref(null)
@@ -177,6 +178,23 @@ onMounted(() => {
   }
   applyTheme(theme.value)
 
+  // Prevent scrolling during loading
+  document.body.style.overflow = 'hidden'
+
+  // Hide loading page after a short delay or when page is ready
+  const hideLoading = () => {
+    setTimeout(() => {
+      isLoading.value = false
+      document.body.style.overflow = ''
+    }, 800) // 800ms delay for smooth transition
+  }
+
+  if (document.readyState === 'complete') {
+    hideLoading()
+  } else {
+    window.addEventListener('load', hideLoading)
+  }
+
   const sections = document.querySelectorAll('section[id]')
   observer = new IntersectionObserver(
     (entries) => {
@@ -219,7 +237,22 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="page">
+  <!-- Loading Page -->
+  <Transition name="loading-fade">
+    <div v-if="isLoading" class="loading-page">
+      <div class="loading-content">
+        <div class="loading-spinner">
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring"></div>
+        </div>
+        <h2 class="loading-text">Elijah Zacarias</h2>
+        <p class="loading-subtext">Loading Portfolio...</p>
+      </div>
+    </div>
+  </Transition>
+
+  <div class="page" :class="{ 'page-loaded': !isLoading }">
     <header class="topbar">
       <div class="brand">Elijah Zacarias</div>
       <nav class="nav">
@@ -430,7 +463,7 @@ onBeforeUnmount(() => {
           </p>
         </div>
         <div class="contact_content">
-          <form class="contact_form">
+          <form class="contact_form" @submit.prevent>
             <div class="form_group">
               <label for="name">Name</label>
               <input id="name" type="text" required placeholder="Your name" />
