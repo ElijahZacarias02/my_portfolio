@@ -4,6 +4,7 @@ import Typed from 'typed.js'
 import avatarImage from './assets/img/User-Avatar-Profile-Clip-Art-Transparent-PNG.png'
 import exodiaproImage from './assets/img/exodiapro.png'
 import goldencupemcImage from './assets/img/goldencupemc.jpg'
+import resumePdf from './assets/file/Elijah_Zacarias_Resume.pdf'
 const projects = [
   {
     title: 'EXODiA PRO',
@@ -18,8 +19,8 @@ const projects = [
       'Performance optimization',
     ],
     tags: ['HTML5', 'CSS3', 'JavaScript', 'Bootstrap 5'],
-    link: 'https://goldencupemc.netlify.app/',
-    github: 'https://github.com/ElijahZacarias02/goldencupemc',
+    link: 'https://exodiapro.com',
+    github: 'https://github.com/ElijahZacarias02/exodiapro',
     image: exodiaproImage,
   },
   {
@@ -131,6 +132,15 @@ const submitContactForm = () => {
   window.location.href = mailtoLink
   // Reset form
   contactForm.value = { name: '', email: '', message: '' }
+}
+
+const downloadResume = () => {
+  const link = document.createElement('a')
+  link.href = resumePdf
+  link.download = 'Elijah_Zacarias_Resume.pdf'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 const applyTheme = (value) => {
@@ -251,7 +261,7 @@ onBeforeUnmount(() => {
             with a strong focus on detail, scalability, and performance.
           </p>
           <div class="hero_actions">
-            <a class="button primary" href="#contact" @click.prevent="handleNavClick('contact')"
+            <a class="button primary" href="#" @click.prevent="downloadResume"
               >Download my resume</a
             >
             <a class="button ghost" href="#projects" @click.prevent="handleNavClick('projects')"
