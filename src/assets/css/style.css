@@ -293,7 +293,7 @@ a {
 
 .button.primary {
   background: linear-gradient(120deg, #4f46e5, #22d3ee);
-  color: #0b1021;
+  color: #ffffff;
   border: none;
 }
 
@@ -504,7 +504,7 @@ a {
   margin: 0;
   padding: 0 0.25rem;
   font-size: clamp(0.9rem, 2.5vw, 1rem);
-  flex: 1;
+  /* flex: 1; */
 }
 
 .project_tags {
@@ -812,6 +812,32 @@ a {
 .form_group textarea {
   resize: vertical;
   min-height: 120px;
+}
+
+.form_group input:disabled,
+.form_group textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form_status {
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.form_status.success {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #16a34a;
+}
+
+.form_status.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #dc2626;
 }
 
 .contact_social {

@@ -12,13 +12,13 @@ const projects = [
       'EXODiA PRO is all about helping aspiring idols shine. Our passionate experts nurture talent, provide hands-on guidance, and craft an immersive journey that pushes boundaries and unlocks true potential.',
     impact:
       'Successfully launched an infographic website that bridges aspiring idols, internal teams, sponsors, and event organizers through engaging visual content.',
-    role: 'Web Developer',
+    role: 'Full Stack Web Developer',
     responsibilities: [
       'Developed responsive and user-friendly interfaces',
       'Ensured cross-browser and cross-device compatibility',
-      'Performance optimization',
+      'Built reusable components and maintained consistent styling',
     ],
-    tags: ['HTML5', 'CSS3', 'JavaScript', 'Bootstrap 5'],
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'Jquery', 'CodeIgniter 3', 'MySQL'],
     link: 'https://exodiapro.com',
     github: 'https://github.com/ElijahZacarias02/exodiapro',
     image: exodiaproImage,
@@ -27,10 +27,15 @@ const projects = [
     title: 'GoldenCupEMC',
     description:
       "Showcases Golden Cup's services including copier rentals, sales, maintenance, and consumables. The site is designed to help businesses, schools, and agencies find affordable and reliable copier solutions.",
-    impact: 'Streamlined design workflow, reducing component development time by 50%',
+    impact:
+      'Increased user engagement by building a responsive landing page that made it easier for users to inquire about services.',
     role: 'Frontend Developer',
-    responsibilities: ['Component architecture', 'Design token system', 'Documentation'],
-    tags: ['Design Tokens', 'Storybook', 'TypeScript'],
+    responsibilities: [
+      'Ensured cross-browser and cross-device compatibility',
+      'Optimized website performance and loading speed',
+      'Translated UI/UX designs and business requirements into clean, maintainable code',
+    ],
+    tags: ['HTML5', 'CSS3', 'Bootstrap 5', 'Javascript'],
     link: 'https://goldencupemc.netlify.app/',
     github: 'https://github.com/ElijahZacarias02/goldencupemc',
     image: goldencupemcImage,
@@ -86,19 +91,19 @@ const experience = [
     company: 'Prople BPO, Inc.',
     period: 'Nov 2023 — Present',
     summaries: [
-      'Optimized database queries and reporting logic, improving load times by 40% and ensuring more reliable payroll data.',
-      'Supported business continuity by maintaining and upgrading legacy systems while implementing modern UI improvements.',
-      'Automated payroll and HR reporting, reducing manual Excel preparation time by hours per cycle and minimizing human error.',
+      'Enhanced database performance by optimizing queries and reports, resulting in 40% faster load times and more dependable payroll data.',
+      'Ensured uninterrupted business operations by maintaining legacy systems and delivering modern UI improvements.',
+      'Automated payroll and HR reporting, significantly reducing manual Excel work and minimizing human error.',
     ],
   },
   {
     role: 'Full Stack Web Developer',
     company: 'LUCKY 8 STAR QUEST INC.',
-    period: 'Oct 2019 — Jan 2023',
+    period: 'Oct 2020 — Oct 2023',
     summaries: [
-      'Automated all manual processes of the company, increasing operational efficiency by 60%.',
-      'Developed and managed well-functioning databases and applications serving 150+ daily active users.',
-      'Ensured cross-platform optimization for mobile phones, improving mobile user experience by 50%.',
+      'Automated previously manual company processes, boosting overall operational efficiency by 60%.',
+      'Designed, developed, and managed databases and applications used by 300+ daily active users.',
+      'Optimized the system for mobile use across platforms, significantly improving the mobile user experience.',
     ],
   },
   {
@@ -106,9 +111,9 @@ const experience = [
     company: 'Freelance (Part-time)',
     period: '2018 — Present',
     summaries: [
-      'Worked alongside UI/UX designers to create informative, responsive websites for 10+ clients.',
-      'Ensured cross-platform optimization for mobile phones, achieving 100% mobile compatibility.',
-      'Met both technical and consumer needs, maintaining 95% client satisfaction rate.',
+      'Worked closely with UI/UX designers to build responsive websites that enhanced the user experience for 10+ clients.',
+      'Optimized applications for mobile platforms, delivering 100% mobile compatibility.',
+      'Successfully aligned technical solutions with user needs, maintaining a 95% client satisfaction rate.',
     ],
   },
 ]
@@ -126,13 +131,45 @@ const contactForm = ref({
   email: '',
   message: '',
 })
+const isSubmitting = ref(false)
+const submitStatus = ref(null) // 'success' or 'error'
+const submitMessage = ref('')
 
-const submitContactForm = () => {
-  // In a real app, you'd send this to a backend
-  const mailtoLink = `mailto:your-email@example.com?subject=Contact from ${contactForm.value.name}&body=${encodeURIComponent(contactForm.value.message)}%0D%0A%0D%0AFrom: ${contactForm.value.email}`
-  window.location.href = mailtoLink
-  // Reset form
-  contactForm.value = { name: '', email: '', message: '' }
+const submitContactForm = async () => {
+  if (isSubmitting.value) return
+
+  isSubmitting.value = true
+  submitStatus.value = null
+  submitMessage.value = ''
+
+  try {
+    const response = await fetch('https://formspree.io/f/xeeozznb', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: contactForm.value.name,
+        email: contactForm.value.email,
+        message: contactForm.value.message,
+      }),
+    })
+
+    if (response.ok) {
+      submitStatus.value = 'success'
+      submitMessage.value = 'Thank you! Your message has been sent successfully.'
+      // Reset form
+      contactForm.value = { name: '', email: '', message: '' }
+    } else {
+      throw new Error('Failed to send message')
+    }
+  } catch (error) {
+    submitStatus.value = 'error'
+    submitMessage.value = 'Sorry, there was an error sending your message. Please try again later.'
+    console.error('Form submission error:', error)
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 const downloadResume = () => {
@@ -463,25 +500,46 @@ onBeforeUnmount(() => {
           </p>
         </div>
         <div class="contact_content">
-          <form class="contact_form" @submit.prevent>
+          <form class="contact_form" @submit.prevent="submitContactForm">
             <div class="form_group">
               <label for="name">Name</label>
-              <input id="name" type="text" required placeholder="Your name" />
+              <input
+                id="name"
+                type="text"
+                v-model="contactForm.name"
+                required
+                placeholder="Your name"
+                :disabled="isSubmitting"
+              />
             </div>
             <div class="form_group">
               <label for="email">Email</label>
-              <input id="email" type="email" required placeholder="your.email@example.com" />
+              <input
+                id="email"
+                type="email"
+                v-model="contactForm.email"
+                required
+                placeholder="your.email@example.com"
+                :disabled="isSubmitting"
+              />
             </div>
             <div class="form_group">
               <label for="message">Message</label>
               <textarea
                 id="message"
+                v-model="contactForm.message"
                 required
                 rows="5"
                 placeholder="Tell me about your project..."
+                :disabled="isSubmitting"
               ></textarea>
             </div>
-            <button type="submit" disabled class="button primary">Send Message</button>
+            <div v-if="submitMessage" class="form_status" :class="submitStatus">
+              {{ submitMessage }}
+            </div>
+            <button type="submit" :disabled="isSubmitting" class="button primary">
+              {{ isSubmitting ? 'Sending...' : 'Send Message' }}
+            </button>
           </form>
           <div class="contact_social">
             <h3>Connect with me</h3>
