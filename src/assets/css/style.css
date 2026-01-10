@@ -237,6 +237,7 @@ a {
 .typed-text {
   color: var(--text-primary);
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .grad {
@@ -254,7 +255,7 @@ a {
   font-weight: 600;
 }
 
-.lede {
+.intro-text {
   color: var(--text-muted);
   max-width: 60ch;
   line-height: 1.6;
@@ -368,7 +369,7 @@ a {
   max-height: none;
 }
 
-.about_content .lede {
+.about_content .intro-text {
   max-width: 70ch;
   font-size: 1.05rem;
   line-height: 1.7;
@@ -921,8 +922,17 @@ a {
   }
 
   .hero_into {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .hero_into .hero_value {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+  }
+
+  .hero_into .typed-text {
+    font-size: clamp(0.95rem, 3.5vw, 1.25rem);
   }
 
   .hero_actions {
@@ -1079,4 +1089,127 @@ a {
 /* Prevent scrolling during loading */
 body:has(.loading-page) {
   overflow: hidden;
+}
+
+/* Footer Styles */
+.footer {
+  margin-top: 4rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--panel-border);
+}
+
+.footer_content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.footer_brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer_name {
+  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.footer_tagline {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0;
+  font-weight: 500;
+}
+
+.footer_links {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer_link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--ghost-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease,
+    border-color 0.2s ease;
+}
+
+.footer_link:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  border-color: var(--text-dim);
+}
+
+.footer_link svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.footer_copyright {
+  margin-top: 0.5rem;
+}
+
+.footer_copyright p {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin: 0;
+  font-weight: 500;
+}
+
+@media (max-width: 720px) {
+  .footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+  }
+
+  .footer_content {
+    gap: 1.25rem;
+  }
+
+  .footer_name {
+    font-size: 1.1rem;
+  }
+
+  .footer_tagline {
+    font-size: 0.85rem;
+  }
+
+  .footer_links {
+    gap: 0.75rem;
+  }
+
+  .footer_link {
+    width: 40px;
+    height: 40px;
+  }
+
+  .footer_link svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .footer_copyright p {
+    font-size: 0.8rem;
+  }
 }

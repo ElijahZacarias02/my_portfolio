@@ -7,38 +7,42 @@ import goldencupemcImage from './assets/img/goldencupemc.jpg'
 import resumePdf from './assets/file/Elijah_Zacarias_Resume.pdf'
 const projects = [
   {
+    title: 'GoldenCupEMC',
+    description:
+      "GoldenCupEMC's website was built from the ground up as a promotional tool, aiming to boost the business's online presence and attract new customers. With no prior design elements to work from, the project required a complete start. My focus was on understanding the company's objectives, organizing the website's content, and mapping out the user experience. This approach allowed me to develop a modern, user-friendly design that clearly presented the services offered and facilitated easy communication for potential clients.",
+    impact:
+      'Improved brand visibility and increased user engagement by delivering a fully responsive landing page that streamlined service inquiries across all devices.',
+    role: 'Front-End Web Developer',
+    responsibilities: [
+      'Designed and implemented a responsive landing page from the ground up',
+      'Ensured cross-browser and cross-device compatibility for consistent user experience',
+      'Optimized website performance, accessibility, and loading speed',
+      'Translated business requirements into clean, maintainable, and scalable front-end code',
+      'Implemented reusable and well-organized components to improve maintainability and scalability',
+    ],
+    tags: ['HTML5', 'CSS3', 'Bootstrap 5', 'JavaScript', 'PHP'],
+    link: 'https://goldencupemc.netlify.app/',
+    github: 'https://github.com/ElijahZacarias02/goldencupemc',
+    image: goldencupemcImage,
+  },
+  {
     title: 'EXODiA PRO',
     description:
-      'EXODiA PRO is all about helping aspiring idols shine. Our passionate experts nurture talent, provide hands-on guidance, and craft an immersive journey that pushes boundaries and unlocks true potential.',
+      'EXODiA PRO is a creative platform for helping aspiring idols discover their strengths and shine with confidence. The project uses close collaboration with user interface and user experience designers to deliver an immersive and visually compelling experience. Together we craft intuitive user flows, engaging layouts, and interactive elements that reflect the brand’s energy and vision. And as with any truly great experience, utilizing these fundamentals enables the team to use a seamless digital journey that nurtures talent, guides users every step of the way and inspires them to push boundaries and unlock their full potential generating the type of success that drives us all.',
     impact:
       'Successfully launched an infographic website that bridges aspiring idols, internal teams, sponsors, and event organizers through engaging visual content.',
-    role: 'Full Stack Web Developer',
+    role: 'Full-Stack Web Developer',
     responsibilities: [
-      'Developed responsive and user-friendly interfaces',
-      'Ensured cross-browser and cross-device compatibility',
-      'Built reusable components and maintained consistent styling',
+      'Developed responsive, user-friendly interfaces based on approved UI/UX designs',
+      'Collaborated closely with UI/UX designers to ensure accurate implementation and visual consistency',
+      'Ensured cross-browser and cross-device compatibility for a seamless user experience',
+      'Built reusable, scalable components to improve maintainability and development efficiency',
+      'Maintained consistent styling and layout across the entire application',
     ],
     tags: ['HTML5', 'CSS3', 'JavaScript', 'Jquery', 'CodeIgniter 3', 'MySQL'],
     link: 'https://exodiapro.com',
     github: 'https://github.com/ElijahZacarias02/exodiapro',
     image: exodiaproImage,
-  },
-  {
-    title: 'GoldenCupEMC',
-    description:
-      "Showcases Golden Cup's services including copier rentals, sales, maintenance, and consumables. The site is designed to help businesses, schools, and agencies find affordable and reliable copier solutions.",
-    impact:
-      'Increased user engagement by building a responsive landing page that made it easier for users to inquire about services.',
-    role: 'Frontend Developer',
-    responsibilities: [
-      'Ensured cross-browser and cross-device compatibility',
-      'Optimized website performance and loading speed',
-      'Translated UI/UX designs and business requirements into clean, maintainable code',
-    ],
-    tags: ['HTML5', 'CSS3', 'Bootstrap 5', 'Javascript'],
-    link: 'https://goldencupemc.netlify.app/',
-    github: 'https://github.com/ElijahZacarias02/goldencupemc',
-    image: goldencupemcImage,
   },
 ]
 
@@ -48,38 +52,42 @@ const navLinks = [
   { id: 'skills', label: 'Skills' },
   { id: 'projects', label: 'Projects' },
   { id: 'experience', label: 'Experience' },
+  { id: 'education', label: 'Education' },
   { id: 'contact', label: 'Contact' },
 ]
 
 const skills = {
-  'Front End Development': [
+  'Front-End Web Development': [
     { name: 'HTML5', icon: '🌐' },
     { name: 'CSS3', icon: '🎨' },
-    { name: 'JavaScript', icon: '⚡' },
     { name: 'Bootstrap 3, 4, & 5', icon: '📱' },
-    { name: 'PHP', icon: '🐘' },
-    { name: 'MySQL', icon: '🗄️' },
-  ],
-  'Back End Development': [
-    { name: 'Vue 3', icon: '💚' },
-    { name: 'Tailwind', icon: '🎯' },
+    { name: 'Tailwind CSS', icon: '🎯' },
+    { name: 'JavaScript', icon: '⚡' },
     { name: 'jQuery', icon: '📜' },
-    { name: 'CodeIgniter 2, 3, & 4', icon: '🔥' },
     { name: 'Ajax', icon: '🔄' },
+    { name: 'Vue', icon: '💚' },
+    { name: 'React', icon: '⚛️' },
+  ],
+  'Back-End Web Development': [
+    { name: 'PHP', icon: '🐘' },
+    { name: 'CodeIgniter (2, 3 & 4 - MVC)', icon: '🔥' },
+    { name: 'Express.js', icon: '🚀' },
+    { name: 'Node.js', icon: '🟢' },
+    { name: 'MySQL', icon: '🗄️' },
+    { name: 'MongoDB', icon: '🍃' },
   ],
   Tools: [
-    { name: 'Git', icon: '📦' },
+    { name: 'Version Control (Git & SVN)', icon: '📦' },
     { name: 'GitHub', icon: '🐙' },
-    { name: 'VSCode', icon: '💻' },
+    { name: 'VS Code', icon: '💻' },
     { name: 'Postman', icon: '📬' },
-    { name: 'SVN', icon: '📂' },
   ],
 }
 
 const getSkillIcon = (category) => {
   const icons = {
-    'Front End Development': '🎨',
-    'Back End Development': '⚙️',
+    'Front End Web Development': '🎨',
+    'Back End Web Development': '⚙️',
     Tools: '🛠️',
   }
   return icons[category] || '📦'
@@ -91,30 +99,44 @@ const experience = [
     company: 'Prople BPO, Inc.',
     period: 'Nov 2023 — Present',
     summaries: [
-      'Enhanced database performance by optimizing queries and reports, resulting in 40% faster load times and more dependable payroll data.',
-      'Ensured uninterrupted business operations by maintaining legacy systems and delivering modern UI improvements.',
-      'Automated payroll and HR reporting, significantly reducing manual Excel work and minimizing human error.',
+      'Developed and maintained web-based applications supporting finance, HR, and transaction-processing services for 10+ client accounts, ensuring stable daily operations.',
+      'Optimized database queries and reporting workflows, reducing payroll and HR system load times by 40% and improving data reliability for client operations.',
+      'Maintained and enhanced legacy systems used by multiple clients while introducing modern UI/UX improvements, delivering usability gains with zero downtime or service disruption.',
+      'Designed and implemented automated payroll and HR reporting processes, reducing manual Excel-based reporting by 60–70% and improving overall data accuracy.',
+      'Collaborated with cross-functional teams to deliver new features and resolve production issues across 5+ client-facing applications, reducing turnaround time and improving system stability.',
     ],
   },
   {
-    role: 'Full Stack Web Developer',
+    role: 'Full-Stack Web Developer',
     company: 'LUCKY 8 STAR QUEST INC.',
     period: 'Oct 2020 — Oct 2023',
     summaries: [
-      'Automated previously manual company processes, boosting overall operational efficiency by 60%.',
-      'Designed, developed, and managed databases and applications used by 300+ daily active users.',
-      'Optimized the system for mobile use across platforms, significantly improving the mobile user experience.',
+      'Developed and maintained web applications supporting gaming and entertainment operations, improving system reliability and user workflows for 300+ daily active users.',
+      'Automated manual operational processes using web technologies and backend systems (CodeIgniter 3, MySQL), increasing efficiency by 60% and significantly reducing repetitive tasks.',
+      'Designed, managed, and optimized MySQL databases supporting high-volume daily usage, ensuring data integrity, fast query performance, and minimal downtime.',
+      'Built custom APIs and integrated system modules to streamline gaming and reporting workflows, reducing data processing errors by 30–40% and enabling real-time data access.',
+      'Implemented responsive web design techniques to ensure consistent performance across mobile, tablet, and desktop devices, improving usability and reducing support requests.',
     ],
   },
   {
-    role: 'Front End Web Developer',
+    role: 'Front-End Web Developer',
     company: 'Freelance (Part-time)',
     period: '2018 — Present',
     summaries: [
-      'Worked closely with UI/UX designers to build responsive websites that enhanced the user experience for 10+ clients.',
-      'Optimized applications for mobile platforms, delivering 100% mobile compatibility.',
-      'Successfully aligned technical solutions with user needs, maintaining a 95% client satisfaction rate.',
+      'Delivered responsive, client-focused websites for 10+ freelance clients, integrating SEO best practices (semantic HTML, optimized metadata, Core Web Vitals, and mobile-first design) to improve usability, performance, and search visibility across devices.',
+      'Collaborated directly with clients to gather requirements, iterate on feedback, and deliver projects on schedule.',
+      'Translated UI/UX designs into pixel-accurate, accessible interfaces, reducing design-to-development revisions by approximately 25%.',
+      'Implemented mobile-first and responsive design approaches, resulting in 20–30% higher user engagement on mobile devices.',
+      'Maintained and enhanced existing websites by resolving UI issues and implementing improvements that reduced support requests by 30%.',
     ],
+  },
+]
+
+const education = [
+  {
+    degree: 'BS INFORMATION TECHNOLOGY',
+    school: 'STI COLLEGE MAKATI',
+    year: '2015 - 2019',
   },
 ]
 
@@ -124,6 +146,8 @@ const isLoading = ref(true)
 let observer
 let typedInstance = null
 const typedElement = ref(null)
+let scrollHandler = null
+let scrollTimeout = null
 
 // Contact form state
 const contactForm = ref({
@@ -233,28 +257,71 @@ onMounted(() => {
   }
 
   const sections = document.querySelectorAll('section[id]')
+  const header = document.querySelector('.topbar')
+  const headerHeight = header ? header.offsetHeight : 80
+
+  // Function to update active section based on scroll position
+  const updateActiveSection = () => {
+    const scrollPosition = window.scrollY + headerHeight + 100
+
+    let currentSection = 'hero'
+    sections.forEach((section) => {
+      const sectionTop = section.offsetTop
+      const sectionHeight = section.offsetHeight
+
+      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+        currentSection = section.id
+      }
+    })
+
+    activeSection.value = currentSection
+  }
+
+  // Track all intersecting sections and select the one with highest visibility
+  const intersectingSections = new Map()
+
   observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          activeSection.value = entry.target.id
+          intersectingSections.set(entry.target.id, entry.intersectionRatio)
+        } else {
+          intersectingSections.delete(entry.target.id)
         }
       })
+
+      // Find the section with the highest intersection ratio
+      if (intersectingSections.size > 0) {
+        const maxEntry = Array.from(intersectingSections.entries()).reduce((a, b) =>
+          a[1] > b[1] ? a : b,
+        )
+        activeSection.value = maxEntry[0]
+      }
     },
     {
       root: null,
-      threshold: 0.35,
-      rootMargin: '-10% 0px -45% 0px',
+      threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
+      rootMargin: '-15% 0px -50% 0px',
     },
   )
 
   sections.forEach((section) => observer.observe(section))
 
+  // Add scroll listener as fallback for more reliable detection
+  scrollHandler = () => {
+    clearTimeout(scrollTimeout)
+    scrollTimeout = setTimeout(updateActiveSection, 10)
+  }
+  window.addEventListener('scroll', scrollHandler, { passive: true })
+
+  // Initial check
+  updateActiveSection()
+
   // Initialize Typed.js
   nextTick(() => {
     if (typedElement.value) {
       typedInstance = new Typed(typedElement.value, {
-        strings: ['Front End Development', 'Back End Development'],
+        strings: ['Front-End Web Development', 'Back-End Web Development'],
         typeSpeed: 50,
         backSpeed: 30,
         backDelay: 2000,
@@ -270,6 +337,12 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (observer) observer.disconnect()
   if (typedInstance) typedInstance.destroy()
+  if (scrollHandler) {
+    window.removeEventListener('scroll', scrollHandler)
+  }
+  if (scrollTimeout) {
+    clearTimeout(scrollTimeout)
+  }
 })
 </script>
 
@@ -326,7 +399,7 @@ onBeforeUnmount(() => {
             <span class="hero_value">I am into</span>
             <span ref="typedElement" class="typed-text"></span>
           </p>
-          <p class="lede">
+          <p class="intro-text">
             I develop intuitive, user-friendly web applications tailored to client requirements,
             with a strong focus on detail, scalability, and performance.
           </p>
@@ -352,10 +425,12 @@ onBeforeUnmount(() => {
           <h2>About Me</h2>
         </div>
         <div class="about_content">
-          <p class="lede">
-            I love taking complex business ideas and turning them into simple, easy-to-use
-            experiences. I care about writing clean code and crafting thoughtful designs, making
-            sure everything not only works well but also looks great for the user.
+          <p class="intro-text">
+            I have 5+ years of experience building responsive, scalable, and user-friendly web
+            applications across industries like finance, HR, and gaming/entertainment. I’ve worked
+            on client-facing systems that support critical business operations, always focusing on
+            reliability, performance, and a great user experience. I’m a full-stack developer who
+            enjoys turning real business needs into practical, production-ready solutions.
           </p>
         </div>
       </section>
@@ -487,11 +562,28 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
+      <section class="panel" id="education">
+        <div class="panel_header">
+          <h2>Education</h2>
+        </div>
+        <div class="experience">
+          <div class="timeline">
+            <div v-for="item in education" :key="item.degree" class="timeline_item">
+              <div class="timeline_dot" />
+              <div class="timeline_content">
+                <p class="eyebrow">{{ item.year }}</p>
+                <h4>{{ item.degree }} | {{ item.school }}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="cta" id="contact">
         <div class="contact_header">
           <p class="eyebrow">Let's Make It Happen</p>
           <h2>Have a project in mind?</h2>
-          <p class="lede">
+          <p class="intro-text">
             I'm ready to help bring your project to life. Share your objectives and deadlines, and
             we'll plan the best approach together.
           </p>
@@ -546,7 +638,7 @@ onBeforeUnmount(() => {
             <div class="social_links">
               <a
                 class="button ghost social_link"
-                href="https://www.linkedin.com/in/elijah-zacarias-6a1937193/"
+                href="https://linkedin.com/in/ebzacarias"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -570,23 +662,50 @@ onBeforeUnmount(() => {
                 </svg>
                 <span>GitHub</span>
               </a>
-              <a
-                class="button ghost social_link"
-                href="https://www.instagram.com/r1a2i0n2/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#E4405F">
-                  <path
-                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
-                  ></path>
-                </svg>
-                <span>Instagram</span>
-              </a>
             </div>
           </div>
         </div>
       </section>
     </main>
+
+    <footer class="footer">
+      <div class="footer_content">
+        <div class="footer_brand">
+          <p class="footer_name">Elijah Zacarias</p>
+          <p class="footer_tagline">Full-Stack Web Developer</p>
+        </div>
+        <div class="footer_links">
+          <a
+            class="footer_link"
+            href="https://linkedin.com/in/ebzacarias"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+              ></path>
+            </svg>
+          </a>
+          <a
+            class="footer_link"
+            href="https://github.com/ElijahZacarias02"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+              ></path>
+            </svg>
+          </a>
+        </div>
+        <div class="footer_copyright">
+          <p>&copy; {{ new Date().getFullYear() }} Elijah Zacarias. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
