@@ -26,27 +26,27 @@ const projects = [
     image: goldencupemcImage,
   },
 
-  {
-  title: 'Koepi Street',
-  description:
-    'Koepi Street is an ongoing full-stack web application inspired by a neighborhood café where community, quality, and comfort come together. This project marks my first hands-on experience building with the MERN stack, serving as both a functional product and a personal learning journey. Starting from concept to implementation, I explored how React, Node.js, Express, and MongoDB work together to create a seamless user experience. Throughout development, I focused on structuring scalable components, managing data flow, and implementing backend APIs while continuously improving my understanding of full-stack architecture. The project reflects my growth as a developer, combining technical exploration with thoughtful design to capture the warm, welcoming identity of a community café.',
-  impact:
-    'Strengthened my full-stack development skills while delivering a responsive, data-driven web application that enhances brand presence and simulates real-world business functionality.',
-  role: 'Full-Stack Web Developer',
-  responsibilities: [
-    'Built a full-stack web application using the MERN stack from the ground up',
-    'Designed and implemented responsive UI components with React',
-    'Developed RESTful APIs using Node.js and Express.js',
-    'Integrated MongoDB for data storage and management',
-    'Implemented reusable, modular components to ensure scalability and maintainability',
-    'Focused on performance optimization, accessibility, and clean code practices',
-    'Applied real-world problem-solving while learning and adapting new full-stack concepts',
-  ],
-  tags: ['HTML5', 'CSS3', 'React', 'Node.js', 'Express.js', 'MongoDB', 'Supabase'],
-  link: 'https://koepistreet.netlify.app/',
-  github: 'https://github.com/ElijahZacarias02/koepi-street',
-  image: goldencupemcImage,
-},
+//   {
+//   title: 'Koepi Street',
+//   description:
+//     'Koepi Street is an ongoing full-stack web application inspired by a neighborhood café where community, quality, and comfort come together. This project marks my first hands-on experience building with the MERN stack, serving as both a functional product and a personal learning journey. Starting from concept to implementation, I explored how React, Node.js, Express, and MongoDB work together to create a seamless user experience. Throughout development, I focused on structuring scalable components, managing data flow, and implementing backend APIs while continuously improving my understanding of full-stack architecture. The project reflects my growth as a developer, combining technical exploration with thoughtful design to capture the warm, welcoming identity of a community café.',
+//   impact:
+//     'Strengthened my full-stack development skills while delivering a responsive, data-driven web application that enhances brand presence and simulates real-world business functionality.',
+//   role: 'Full-Stack Web Developer',
+//   responsibilities: [
+//     'Built a full-stack web application using the MERN stack from the ground up',
+//     'Designed and implemented responsive UI components with React',
+//     'Developed RESTful APIs using Node.js and Express.js',
+//     'Integrated MongoDB for data storage and management',
+//     'Implemented reusable, modular components to ensure scalability and maintainability',
+//     'Focused on performance optimization, accessibility, and clean code practices',
+//     'Applied real-world problem-solving while learning and adapting new full-stack concepts',
+//   ],
+//   tags: ['HTML5', 'CSS3', 'React', 'Node.js', 'Express.js', 'MongoDB', 'Supabase'],
+//   link: 'https://koepistreet.netlify.app/',
+//   github: 'https://github.com/ElijahZacarias02/koepi-street',
+//   image: goldencupemcImage,
+// },
 
 
 
