@@ -375,6 +375,56 @@ a {
   line-height: 1.7;
 }
 
+.about_see_more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--panel-border);
+  background: var(--chip-bg);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.about_see_more:hover {
+  background: linear-gradient(120deg, rgba(79, 70, 229, 0.12), rgba(14, 165, 233, 0.12));
+  border-color: rgba(79, 70, 229, 0.25);
+  color: #4f46e5;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.15);
+  transform: translateY(-1px);
+}
+
+.about_see_more:focus-visible {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}
+
+.about_see_more_icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease;
+}
+
+.about_see_more_icon.expanded {
+  transform: rotate(180deg);
+}
+
+.project_see_more {
+  margin-top: 0.5rem;
+}
+
 .projects_grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));

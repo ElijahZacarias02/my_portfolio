@@ -25,12 +25,35 @@ const projects = [
     github: 'https://github.com/ElijahZacarias02/goldencupemc',
     image: goldencupemcImage,
   },
+
+  {
+  title: 'Koepi Street',
+  description:
+    'Koepi Street is an ongoing full-stack web application inspired by a neighborhood café where community, quality, and comfort come together. This project marks my first hands-on experience building with the MERN stack, serving as both a functional product and a personal learning journey. Starting from concept to implementation, I explored how React, Node.js, Express, and MongoDB work together to create a seamless user experience. Throughout development, I focused on structuring scalable components, managing data flow, and implementing backend APIs while continuously improving my understanding of full-stack architecture. The project reflects my growth as a developer, combining technical exploration with thoughtful design to capture the warm, welcoming identity of a community café.',
+  impact:
+    'Strengthened my full-stack development skills while delivering a responsive, data-driven web application that enhances brand presence and simulates real-world business functionality.',
+  role: 'Full-Stack Web Developer',
+  responsibilities: [
+    'Built a full-stack web application using the MERN stack from the ground up',
+    'Designed and implemented responsive UI components with React',
+    'Developed RESTful APIs using Node.js and Express.js',
+    'Integrated MongoDB for data storage and management',
+    'Implemented reusable, modular components to ensure scalability and maintainability',
+    'Focused on performance optimization, accessibility, and clean code practices',
+    'Applied real-world problem-solving while learning and adapting new full-stack concepts',
+  ],
+  tags: ['HTML5', 'CSS3', 'React', 'Node.js', 'Express.js', 'MongoDB', 'Supabase'],
+  link: 'https://koepistreet.netlify.app/',
+  github: 'https://github.com/ElijahZacarias02/koepi-street',
+  image: goldencupemcImage,
+},
+
+
+
   {
     title: 'EXODiA PRO',
-    description:
-      'EXODiA PRO is a creative platform for helping aspiring idols discover their strengths and shine with confidence. The project uses close collaboration with user interface and user experience designers to deliver an immersive and visually compelling experience. Together we craft intuitive user flows, engaging layouts, and interactive elements that reflect the brand’s energy and vision. And as with any truly great experience, utilizing these fundamentals enables the team to use a seamless digital journey that nurtures talent, guides users every step of the way and inspires them to push boundaries and unlock their full potential generating the type of success that drives us all.',
-    impact:
-      'Successfully launched an infographic website that bridges aspiring idols, internal teams, sponsors, and event organizers through engaging visual content.',
+    description: "EXODiA PRO is a creative tool designed to help young idols discover their strengths and develop with confidence. The aim of the project was to create a feeling of inspiration, ease of use, and a sense of the brand's energy while still moving the user through the experience from start to finish. I collaborated with UI and UX designers throughout the project, working together on everything from user flows to layout and interactive elements. A large part of my involvement was in helping to inform how users would flow through the experience and ensuring that the design was intuitive, engaging, and motivational rather than overwhelming. Through simplicity, collaboration, and sound design principles, we were able to create a seamless digital experience that supports the development of talent, inspires creativity, and helps users feel confident as they discover and test their limits.",
+    impact: 'Successfully launched an infographic website that bridges aspiring idols, internal teams, sponsors, and event organizers through engaging visual content.',
     role: 'Full-Stack Web Developer',
     responsibilities: [
       'Developed responsive, user-friendly interfaces based on approved UI/UX designs',
@@ -39,10 +62,11 @@ const projects = [
       'Built reusable, scalable components to improve maintainability and development efficiency',
       'Maintained consistent styling and layout across the entire application',
     ],
-    tags: ['HTML5', 'CSS3', 'JavaScript', 'Jquery', 'CodeIgniter 3', 'MySQL'],
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'jQuery', 'CodeIgniter 3', 'MySQL'],
     link: 'https://exodiapro.com',
     github: 'https://github.com/ElijahZacarias02/exodiapro',
     image: exodiaproImage,
+
   },
 ]
 
@@ -158,6 +182,36 @@ const contactForm = ref({
 const isSubmitting = ref(false)
 const submitStatus = ref(null) // 'success' or 'error'
 const submitMessage = ref('')
+
+// About section expand/collapse
+const aboutExpanded = ref(false)
+const aboutText =
+  "I have 5+ years of experience building responsive, scalable, and user-friendly web applications across industries like finance, HR, and gaming/entertainment. I've worked on client-facing systems that support critical business operations, always focusing on reliability, performance, and a great user experience. I'm a web developer who enjoys turning real business needs into practical, production-ready solutions. I specialize in both front-end technologies like Vue, React, and modern CSS and back-end systems using PHP, CodeIgniter, Node.js, and MySQL. Whether it's improving database performance, automating manual workflows, or designing intuitive interfaces, I aim to deliver solutions that are maintainable, accessible, and aligned with business goals. I'm comfortable collaborating with designers and stakeholders and thrive in environments where I can learn new tools and tackle varied challenges."
+const ABOUT_PREVIEW_WORDS = 50
+const aboutWords = aboutText.split(/\s+/)
+const aboutPreview =
+  aboutWords.length > ABOUT_PREVIEW_WORDS
+    ? aboutWords.slice(0, ABOUT_PREVIEW_WORDS).join(' ') + '...'
+    : aboutText
+const aboutNeedsExpand = aboutWords.length > ABOUT_PREVIEW_WORDS
+
+// Project description expand/collapse (keyed by project title)
+const PROJECT_DESC_PREVIEW_WORDS = 50
+const projectDescExpanded = ref({})
+const getProjectDescriptionPreview = (description, limit = PROJECT_DESC_PREVIEW_WORDS) => {
+  if (!description || typeof description !== 'string') return ''
+  const words = description.trim().split(/\s+/)
+  if (words.length <= limit) return description
+  return words.slice(0, limit).join(' ') + '...'
+}
+const projectDescriptionNeedsExpand = (description, limit = PROJECT_DESC_PREVIEW_WORDS) => {
+  if (!description || typeof description !== 'string') return false
+  return description.trim().split(/\s+/).length > limit
+}
+const toggleProjectDescription = (title) => {
+  const current = projectDescExpanded.value
+  projectDescExpanded.value = { ...current, [title]: !current[title] }
+}
 
 const submitContactForm = async () => {
   if (isSubmitting.value) return
@@ -356,7 +410,7 @@ onBeforeUnmount(() => {
           <div class="spinner-ring"></div>
           <div class="spinner-ring"></div>
         </div>
-        <h2 class="loading-text">Elijah Zacarias</h2>
+        <h2 class="loading-text">Elijah B. Zacarias</h2>
         <p class="loading-subtext">Loading Portfolio...</p>
       </div>
     </div>
@@ -364,24 +418,15 @@ onBeforeUnmount(() => {
 
   <div class="page" :class="{ 'page-loaded': !isLoading }">
     <header class="topbar">
-      <div class="brand">Elijah Zacarias</div>
+      <div class="brand">Elijah B. Zacarias</div>
       <nav class="nav">
-        <a
-          v-for="link in navLinks"
-          :key="link.id"
-          :href="`#${link.id}`"
-          :class="[{ active: activeSection === link.id }]"
-          @click.prevent="handleNavClick(link.id)"
-        >
+        <a v-for="link in navLinks" :key="link.id" :href="`#${link.id}`"
+          :class="[{ active: activeSection === link.id }]" @click.prevent="handleNavClick(link.id)">
           {{ link.label }}
         </a>
       </nav>
-      <button
-        class="toggle"
-        type="button"
-        @click="toggleTheme"
-        :aria-label="`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`"
-      >
+      <button class="toggle" type="button" @click="toggleTheme"
+        :aria-label="`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`">
         <span class="toggle_icon" aria-hidden="true">{{ theme === 'light' ? '☀︎' : '☾' }}</span>
         <span class="toggle_label">{{ theme === 'light' ? 'Dark' : 'Light' }} Mode</span>
       </button>
@@ -404,19 +449,13 @@ onBeforeUnmount(() => {
             with a strong focus on detail, scalability, and performance.
           </p>
           <div class="hero_actions">
-            <a class="button primary" href="#" @click.prevent="downloadResume"
-              >Download my resume</a
-            >
-            <a class="button ghost" href="#projects" @click.prevent="handleNavClick('projects')"
-              >View Projects</a
-            >
-            <a class="button ghost" href="#contact" @click.prevent="handleNavClick('contact')"
-              >Contact Me</a
-            >
+            <a class="button primary" href="#" @click.prevent="downloadResume">Download my resume</a>
+            <a class="button ghost" href="#projects" @click.prevent="handleNavClick('projects')">View Projects</a>
+            <a class="button ghost" href="#contact" @click.prevent="handleNavClick('contact')">Contact Me</a>
           </div>
         </div>
         <div class="hero_card">
-          <img :src="avatarImage" alt="Elijah Zacarias" class="hero_avatar" />
+          <img :src="avatarImage" alt="Elijah B. Zacarias" class="hero_avatar" />
         </div>
       </section>
 
@@ -426,12 +465,18 @@ onBeforeUnmount(() => {
         </div>
         <div class="about_content">
           <p class="intro-text">
-            I have 5+ years of experience building responsive, scalable, and user-friendly web
-            applications across industries like finance, HR, and gaming/entertainment. I’ve worked
-            on client-facing systems that support critical business operations, always focusing on
-            reliability, performance, and a great user experience. I’m a full-stack developer who
-            enjoys turning real business needs into practical, production-ready solutions.
+            {{ aboutExpanded ? aboutText : aboutPreview }}
           </p>
+          <button v-if="aboutNeedsExpand" type="button" class="about_see_more" :aria-expanded="aboutExpanded"
+            @click="aboutExpanded = !aboutExpanded">
+            <span class="about_see_more_text">{{ aboutExpanded ? 'See less' : 'See more' }}</span>
+            <span class="about_see_more_icon" :class="{ expanded: aboutExpanded }" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </span>
+          </button>
         </div>
       </section>
 
@@ -446,14 +491,10 @@ onBeforeUnmount(() => {
               {{ category }}
             </h3>
             <div class="tags">
-              <span
-                v-for="item in items"
-                :key="typeof item === 'string' ? item : item.name"
-                class="tag"
-              >
+              <span v-for="item in items" :key="typeof item === 'string' ? item : item.name" class="tag">
                 <span v-if="typeof item === 'object' && item.icon" class="tag-icon">{{
                   item.icon
-                }}</span>
+                  }}</span>
                 {{ typeof item === 'string' ? item : item.name }}
               </span>
             </div>
@@ -471,16 +512,8 @@ onBeforeUnmount(() => {
               <img :src="project.image" :alt="project.title" />
             </div>
             <div v-else class="project_image_placeholder">
-              <svg
-                width="48"
-                height="48"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                 <circle cx="8.5" cy="8.5" r="1.5"></circle>
                 <polyline points="21 15 16 10 5 21"></polyline>
@@ -495,12 +528,29 @@ onBeforeUnmount(() => {
                   </p>
                 </div>
               </div>
-              <p class="project_description">{{ project.description }}</p>
+              <p class="project_description">
+                {{
+                  projectDescExpanded[project.title]
+                    ? project.description
+                    : getProjectDescriptionPreview(project.description)
+                }}
+              </p>
+              <button v-if="projectDescriptionNeedsExpand(project.description)" type="button"
+                class="about_see_more project_see_more" :aria-expanded="!!projectDescExpanded[project.title]"
+                @click="toggleProjectDescription(project.title)">
+                <span class="about_see_more_text">
+                  {{ projectDescExpanded[project.title] ? 'See less' : 'See more' }}
+                </span>
+                <span class="about_see_more_icon" :class="{ expanded: projectDescExpanded[project.title] }"
+                  aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </button>
               <p v-if="project.impact" class="project_impact">{{ project.impact }}</p>
-              <div
-                v-if="project.responsibilities && project.responsibilities.length"
-                class="project_responsibilities"
-              >
+              <div v-if="project.responsibilities && project.responsibilities.length" class="project_responsibilities">
                 <p class="project_responsibilities_title"><strong>Responsibilities:</strong></p>
                 <ul class="project_responsibilities_list">
                   <li v-for="(resp, idx) in project.responsibilities" :key="idx">{{ resp }}</li>
@@ -510,28 +560,15 @@ onBeforeUnmount(() => {
                 <span v-for="tag in project.tags" :key="tag" class="project_tag">{{ tag }}</span>
               </div>
               <div class="project_buttons">
-                <a
-                  v-if="project.link && project.link !== '#'"
-                  :href="project.link"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="button primary project_button"
-                >
+                <a v-if="project.link && project.link !== '#'" :href="project.link" target="_blank" rel="noreferrer"
+                  class="button primary project_button">
                   🔗 Live Demo
                 </a>
-                <a
-                  v-if="project.github"
-                  :href="project.github"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="button ghost project_button"
-                >
+                <a v-if="project.github" :href="project.github" target="_blank" rel="noreferrer"
+                  class="button ghost project_button">
                   💻 Source Code
                 </a>
-                <span
-                  v-else-if="project.link && project.link === '#'"
-                  class="button ghost project_button disabled"
-                >
+                <span v-else-if="project.link && project.link === '#'" class="button ghost project_button disabled">
                   Source available upon request
                 </span>
               </div>
@@ -595,36 +632,18 @@ onBeforeUnmount(() => {
           <form class="contact_form" @submit.prevent="submitContactForm">
             <div class="form_group">
               <label for="name">Name</label>
-              <input
-                id="name"
-                type="text"
-                v-model="contactForm.name"
-                required
-                placeholder="Your name"
-                :disabled="isSubmitting"
-              />
+              <input id="name" type="text" v-model="contactForm.name" required placeholder="Your name"
+                :disabled="isSubmitting" />
             </div>
             <div class="form_group">
               <label for="email">Email</label>
-              <input
-                id="email"
-                type="email"
-                v-model="contactForm.email"
-                required
-                placeholder="your.email@example.com"
-                :disabled="isSubmitting"
-              />
+              <input id="email" type="email" v-model="contactForm.email" required placeholder="your.email@example.com"
+                :disabled="isSubmitting" />
             </div>
             <div class="form_group">
               <label for="message">Message</label>
-              <textarea
-                id="message"
-                v-model="contactForm.message"
-                required
-                rows="5"
-                placeholder="Tell me about your project..."
-                :disabled="isSubmitting"
-              ></textarea>
+              <textarea id="message" v-model="contactForm.message" required rows="5"
+                placeholder="Tell me about your project..." :disabled="isSubmitting"></textarea>
             </div>
             <div v-if="submitMessage" class="form_status" :class="submitStatus">
               {{ submitMessage }}
@@ -636,29 +655,21 @@ onBeforeUnmount(() => {
           <div class="contact_social">
             <h3>Connect with me</h3>
             <div class="social_links">
-              <a
-                class="button ghost social_link"
-                href="https://linkedin.com/in/ebzacarias"
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a class="button ghost social_link" href="https://linkedin.com/in/ebzacarias" target="_blank"
+                rel="noreferrer">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="#0077b5">
                   <path
-                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
-                  ></path>
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z">
+                  </path>
                 </svg>
                 <span>LinkedIn</span>
               </a>
-              <a
-                class="button ghost social_link"
-                href="https://github.com/ElijahZacarias02"
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a class="button ghost social_link" href="https://github.com/ElijahZacarias02" target="_blank"
+                rel="noreferrer">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path
-                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-                  ></path>
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                  </path>
                 </svg>
                 <span>GitHub</span>
               </a>
@@ -671,39 +682,29 @@ onBeforeUnmount(() => {
     <footer class="footer">
       <div class="footer_content">
         <div class="footer_brand">
-          <p class="footer_name">Elijah Zacarias</p>
+          <p class="footer_name">Elijah B. Zacarias</p>
           <p class="footer_tagline">Full-Stack Web Developer</p>
         </div>
         <div class="footer_links">
-          <a
-            class="footer_link"
-            href="https://linkedin.com/in/ebzacarias"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn"
-          >
+          <a class="footer_link" href="https://linkedin.com/in/ebzacarias" target="_blank" rel="noreferrer"
+            aria-label="LinkedIn">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path
-                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
-              ></path>
+                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z">
+              </path>
             </svg>
           </a>
-          <a
-            class="footer_link"
-            href="https://github.com/ElijahZacarias02"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-          >
+          <a class="footer_link" href="https://github.com/ElijahZacarias02" target="_blank" rel="noreferrer"
+            aria-label="GitHub">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path
-                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-              ></path>
+                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+              </path>
             </svg>
           </a>
         </div>
         <div class="footer_copyright">
-          <p>&copy; {{ new Date().getFullYear() }} Elijah Zacarias. All rights reserved.</p>
+          <p>&copy; {{ new Date().getFullYear() }} Elijah B. Zacarias. All rights reserved.</p>
         </div>
       </div>
     </footer>
