@@ -167,6 +167,7 @@ const education = [
 const activeSection = ref('hero')
 const theme = ref('light')
 const isLoading = ref(true)
+const mobileNavOpen = ref(false)
 let observer
 let typedInstance = null
 const typedElement = ref(null)
@@ -265,6 +266,7 @@ const applyTheme = (value) => {
 }
 
 const handleNavClick = (id) => {
+  mobileNavOpen.value = false
   const el = document.getElementById(id)
   if (el) {
     const header = document.querySelector('.topbar')
@@ -277,6 +279,10 @@ const handleNavClick = (id) => {
       behavior: 'smooth',
     })
   }
+}
+
+const toggleMobileNav = () => {
+  mobileNavOpen.value = !mobileNavOpen.value
 }
 
 const toggleTheme = () => {
@@ -410,26 +416,48 @@ onBeforeUnmount(() => {
           <div class="spinner-ring"></div>
           <div class="spinner-ring"></div>
         </div>
-        <h2 class="loading-text">Elijah B. Zacarias</h2>
+        <h2 class="loading-text">Elijah Zacarias</h2>
         <p class="loading-subtext">Loading Portfolio...</p>
       </div>
     </div>
   </Transition>
 
-  <div class="page" :class="{ 'page-loaded': !isLoading }">
+  <div class="page" :class="{ 'page-loaded': !isLoading, 'mobile-nav-open': mobileNavOpen }">
     <header class="topbar">
-      <div class="brand">Elijah B. Zacarias</div>
-      <nav class="nav">
-        <a v-for="link in navLinks" :key="link.id" :href="`#${link.id}`"
-          :class="[{ active: activeSection === link.id }]" @click.prevent="handleNavClick(link.id)">
-          {{ link.label }}
-        </a>
-      </nav>
-      <button class="toggle" type="button" @click="toggleTheme"
-        :aria-label="`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`">
-        <span class="toggle_icon" aria-hidden="true">{{ theme === 'light' ? '☀︎' : '☾' }}</span>
-        <span class="toggle_label">{{ theme === 'light' ? 'Dark' : 'Light' }} Mode</span>
-      </button>
+      <div class="topbar_inner">
+        <div class="brand">Elijah Zacarias</div>
+        <nav class="nav nav_desktop" aria-label="Main navigation">
+          <a v-for="link in navLinks" :key="link.id" :href="`#${link.id}`"
+            :class="[{ active: activeSection === link.id }]" @click.prevent="handleNavClick(link.id)">
+            {{ link.label }}
+          </a>
+        </nav>
+        <div class="topbar_actions">
+          <button class="toggle" type="button" @click="toggleTheme"
+            :aria-label="`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`">
+            <span class="toggle_icon" aria-hidden="true">{{ theme === 'light' ? '☀︎' : '☾' }}</span>
+            <span class="toggle_label">{{ theme === 'light' ? 'Dark' : 'Light' }} Mode</span>
+          </button>
+          <button class="nav_toggle" type="button" aria-label="Toggle menu"
+            :aria-expanded="mobileNavOpen" @click="toggleMobileNav">
+            <span class="nav_toggle_bar" :class="{ open: mobileNavOpen }"></span>
+            <span class="nav_toggle_bar" :class="{ open: mobileNavOpen }"></span>
+            <span class="nav_toggle_bar" :class="{ open: mobileNavOpen }"></span>
+          </button>
+        </div>
+      </div>
+      <Transition name="mobile-nav">
+        <div v-if="mobileNavOpen" class="nav_backdrop" aria-hidden="true" @click="mobileNavOpen = false"></div>
+      </Transition>
+      <Transition name="mobile-nav-slide">
+        <nav v-if="mobileNavOpen" class="nav nav_mobile" aria-label="Mobile navigation">
+          <div class="nav_mobile_brand">Elijah Zacarias</div>
+          <a v-for="link in navLinks" :key="link.id" :href="`#${link.id}`"
+            :class="[{ active: activeSection === link.id }]" @click.prevent="handleNavClick(link.id)">
+            {{ link.label }}
+          </a>
+        </nav>
+      </Transition>
     </header>
 
     <main class="content">
@@ -455,7 +483,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div class="hero_card">
-          <img :src="avatarImage" alt="Elijah B. Zacarias" class="hero_avatar" />
+          <img :src="avatarImage" alt="Elijah Zacarias" class="hero_avatar" />
         </div>
       </section>
 
@@ -682,7 +710,7 @@ onBeforeUnmount(() => {
     <footer class="footer">
       <div class="footer_content">
         <div class="footer_brand">
-          <p class="footer_name">Elijah B. Zacarias</p>
+          <p class="footer_name">Elijah Zacarias</p>
           <p class="footer_tagline">Full-Stack Web Developer</p>
         </div>
         <div class="footer_links">
@@ -704,7 +732,7 @@ onBeforeUnmount(() => {
           </a>
         </div>
         <div class="footer_copyright">
-          <p>&copy; {{ new Date().getFullYear() }} Elijah B. Zacarias. All rights reserved.</p>
+          <p>&copy; {{ new Date().getFullYear() }} Elijah Zacarias. All rights reserved.</p>
         </div>
       </div>
     </footer>
