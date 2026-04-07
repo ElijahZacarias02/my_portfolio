@@ -231,7 +231,13 @@ a {
 }
 
 .toggle_icon {
-  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle_svg {
+  display: block;
 }
 
 .toggle_label {
@@ -270,24 +276,6 @@ a {
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
-}
-
-.wave-emoji {
-  font-size: 1.5rem;
-  animation: wave 2s ease-in-out infinite;
-}
-
-@keyframes wave {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(20deg);
-  }
-  75% {
-    transform: rotate(-20deg);
-  }
 }
 
 .greeting-text {
@@ -512,7 +500,7 @@ a {
 
 .projects_grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
@@ -741,10 +729,20 @@ a {
   text-align: center;
 }
 
+.project_button_icon {
+  flex-shrink: 0;
+}
+
 .project_button.disabled {
   opacity: 0.6;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+.projects_actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
 }
 
 .muted {
@@ -780,8 +778,12 @@ a {
   border-color: var(--text-dim);
 }
 
-.tag-icon {
-  font-size: 1rem;
+.tag-icon-svg {
+  flex-shrink: 0;
+}
+
+.skill-category-svg {
+  display: block;
 }
 
 .skills {
@@ -806,10 +808,10 @@ a {
 }
 
 .skill-icon {
-  font-size: 1.5rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  color: var(--text-dim);
 }
 
 .experience {
