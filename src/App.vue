@@ -1,7 +1,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import Typed from 'typed.js'
-import avatarImage from './assets/img/User-Avatar-Profile-Clip-Art-Transparent-PNG.png'
+import avatarImage from './assets/img/Elijah_Avatar.png'
 import { skillIconByName, skillIconFill } from './skillIconData.js'
 
 const skill = (name) => ({ name, icon: skillIconByName[name] ?? null })

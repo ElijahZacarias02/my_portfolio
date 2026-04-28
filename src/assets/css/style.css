@@ -56,6 +56,27 @@ body {
   scroll-behavior: smooth;
 }
 
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(79, 70, 229, 0);
+  }
+}
+
 #app {
   min-height: 100vh;
 }
@@ -83,7 +104,13 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  backdrop-filter: blur(10px);
+  padding: 0.55rem 0.85rem;
+  border-radius: 16px;
+  border: 1px solid var(--panel-border);
+  background: color-mix(in srgb, var(--panel-bg) 88%, transparent);
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .brand {
@@ -182,23 +209,28 @@ a {
 }
 
 .nav a {
-  color: var(--text-muted);
+  color: var(--text-primary);
   text-decoration: none;
   padding: 0.35rem 0.65rem;
   border-radius: 999px;
+  background: color-mix(in srgb, var(--panel-bg) 74%, transparent);
+  border: 1px solid transparent;
   transition:
     color 0.2s ease,
-    background 0.2s ease;
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .nav a:hover {
   color: var(--text-primary);
   background: var(--hover-bg);
+  border-color: var(--panel-border);
 }
 
 .nav a.active {
   color: var(--text-primary);
-  background: var(--hover-bg);
+  background: linear-gradient(120deg, rgba(79, 70, 229, 0.2), rgba(34, 211, 238, 0.2));
+  border-color: rgba(79, 70, 229, 0.28);
 }
 
 .pill {
@@ -269,6 +301,7 @@ a {
   padding: 1.75rem;
   box-shadow: var(--shadow-strong);
   scroll-margin-top: 100px;
+  animation: fade-up 0.5s ease both;
 }
 
 .hero_greeting {
@@ -429,6 +462,23 @@ a {
   padding: 1.75rem;
   box-shadow: var(--shadow-soft);
   scroll-margin-top: 100px;
+  animation: fade-up 0.55s ease both;
+}
+
+.panel:nth-of-type(2) {
+  animation-delay: 0.06s;
+}
+
+.panel:nth-of-type(3) {
+  animation-delay: 0.12s;
+}
+
+.panel:nth-of-type(4) {
+  animation-delay: 0.18s;
+}
+
+.panel:nth-of-type(5) {
+  animation-delay: 0.24s;
 }
 
 .panel_header h2 {
@@ -515,13 +565,28 @@ a {
   transition:
     transform 0.2s ease,
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background 0.25s ease;
+  animation: fade-up 0.45s ease both;
 }
 
 .project_card:hover {
   transform: translateY(-4px);
   border-color: var(--text-dim);
   box-shadow: var(--shadow-soft);
+  background: color-mix(in srgb, var(--panel-strong) 84%, var(--hover-bg));
+}
+
+.project_card:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.project_card:nth-child(3) {
+  animation-delay: 0.14s;
+}
+
+.project_card:nth-child(4) {
+  animation-delay: 0.2s;
 }
 
 .project_image {
@@ -769,13 +834,15 @@ a {
   transition:
     background 0.2s ease,
     transform 0.15s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .tag:hover {
   background: var(--hover-bg);
   transform: translateY(-1px);
   border-color: var(--text-dim);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
 }
 
 .tag-icon-svg {
@@ -839,6 +906,19 @@ a {
   position: relative;
   padding-left: 0.5rem;
   margin-bottom: 1rem;
+  animation: fade-up 0.45s ease both;
+}
+
+.timeline_item:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.timeline_item:nth-child(3) {
+  animation-delay: 0.14s;
+}
+
+.timeline_item:nth-child(4) {
+  animation-delay: 0.2s;
 }
 
 .timeline_dot {
@@ -850,6 +930,7 @@ a {
   border-radius: 999px;
   background: linear-gradient(120deg, #22d3ee, #a855f7);
   box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.03);
+  animation: pulse-glow 2.4s ease-in-out infinite;
 }
 
 .timeline h4 {
@@ -937,7 +1018,9 @@ a {
   font-family: inherit;
   transition:
     border-color 0.2s ease,
-    background 0.2s ease;
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
 }
 
 .form_group input:focus,
@@ -945,6 +1028,8 @@ a {
   outline: none;
   border-color: var(--text-dim);
   background: var(--panel-bg);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  transform: translateY(-1px);
 }
 
 .form_group textarea {
@@ -1002,6 +1087,17 @@ a {
   gap: 0.75rem;
   padding: 0.75rem 1rem;
   justify-content: flex-start;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.social_link:hover {
+  transform: translateY(-2px);
+  border-color: var(--text-dim);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
 }
 
 .social_link svg {
@@ -1358,7 +1454,8 @@ body:has(.mobile-nav-open) {
     background 0.2s ease,
     color 0.2s ease,
     transform 0.15s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .footer_link:hover {
@@ -1366,6 +1463,18 @@ body:has(.mobile-nav-open) {
   color: var(--text-primary);
   transform: translateY(-2px);
   border-color: var(--text-dim);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 .footer_link svg {
