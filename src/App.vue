@@ -9,25 +9,25 @@ import exodiaproImage from './assets/img/exodiapro.png'
 import goldencupemcImage from './assets/img/goldencupemc.jpg'
 import resumePdf from './assets/file/Elijah_Zacarias_Resume.pdf'
 const projects = [
-  {
-    title: 'GoldenCupEMC',
-    description:
-      "GoldenCupEMC's website was built from the ground up as a promotional tool, aiming to boost the business's online presence and attract new customers. With no prior design elements to work from, the project required a complete start. My focus was on understanding the company's objectives, organizing the website's content, and mapping out the user experience. This approach allowed me to develop a modern, user-friendly design that clearly presented the services offered and facilitated easy communication for potential clients.",
-    impact:
-      'Improved brand visibility and increased user engagement by delivering a fully responsive landing page that streamlined service inquiries across all devices.',
-    role: 'Front-End Web Developer',
-    responsibilities: [
-      'Designed and implemented a responsive landing page from the ground up',
-      'Ensured cross-browser and cross-device compatibility for consistent user experience',
-      'Optimized website performance, accessibility, and loading speed',
-      'Translated business requirements into clean, maintainable, and scalable front-end code',
-      'Implemented reusable and well-organized components to improve maintainability and scalability',
-    ],
-    tags: ['HTML5', 'CSS3', 'Bootstrap 5', 'JavaScript', 'PHP'],
-    link: 'https://goldencupemc.netlify.app/',
-    github: 'https://github.com/ElijahZacarias02/goldencupemc',
-    image: goldencupemcImage,
-  },
+  // {
+  //   title: 'GoldenCupEMC',
+  //   description:
+  //     "GoldenCupEMC's website was built from the ground up as a promotional tool, aiming to boost the business's online presence and attract new customers. With no prior design elements to work from, the project required a complete start. My focus was on understanding the company's objectives, organizing the website's content, and mapping out the user experience. This approach allowed me to develop a modern, user-friendly design that clearly presented the services offered and facilitated easy communication for potential clients.",
+  //   impact:
+  //     'Improved brand visibility and increased user engagement by delivering a fully responsive landing page that streamlined service inquiries across all devices.',
+  //   role: 'Front-End Web Developer',
+  //   responsibilities: [
+  //     'Designed and implemented a responsive landing page from the ground up',
+  //     'Ensured cross-browser and cross-device compatibility for consistent user experience',
+  //     'Optimized website performance, accessibility, and loading speed',
+  //     'Translated business requirements into clean, maintainable, and scalable front-end code',
+  //     'Implemented reusable and well-organized components to improve maintainability and scalability',
+  //   ],
+  //   tags: ['HTML5', 'CSS3', 'Bootstrap 5', 'JavaScript', 'PHP'],
+  //   link: 'https://goldencupemc.netlify.app/',
+  //   github: 'https://github.com/ElijahZacarias02/goldencupemc',
+  //   image: goldencupemcImage,
+  // },
 
   {
     title: 'EXODiA PRO',
