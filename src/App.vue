@@ -1,7 +1,7 @@
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-import Typed from 'typed.js'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import avatarImage from './assets/img/Elijah_Avatar.png'
+import SectionParallaxDecor from './components/SectionParallaxDecor.vue'
 import { skillIconByName, skillIconFill } from './skillIconData.js'
 
 const skill = (name) => ({ name, icon: skillIconByName[name] ?? null })
@@ -9,25 +9,25 @@ import exodiaproImage from './assets/img/exodiapro.png'
 import goldencupemcImage from './assets/img/goldencupemc.jpg'
 import resumePdf from './assets/file/Elijah_Zacarias_Resume.pdf'
 const projects = [
-  // {
-  //   title: 'GoldenCupEMC',
-  //   description:
-  //     "GoldenCupEMC's website was built from the ground up as a promotional tool, aiming to boost the business's online presence and attract new customers. With no prior design elements to work from, the project required a complete start. My focus was on understanding the company's objectives, organizing the website's content, and mapping out the user experience. This approach allowed me to develop a modern, user-friendly design that clearly presented the services offered and facilitated easy communication for potential clients.",
-  //   impact:
-  //     'Improved brand visibility and increased user engagement by delivering a fully responsive landing page that streamlined service inquiries across all devices.',
-  //   role: 'Front-End Web Developer',
-  //   responsibilities: [
-  //     'Designed and implemented a responsive landing page from the ground up',
-  //     'Ensured cross-browser and cross-device compatibility for consistent user experience',
-  //     'Optimized website performance, accessibility, and loading speed',
-  //     'Translated business requirements into clean, maintainable, and scalable front-end code',
-  //     'Implemented reusable and well-organized components to improve maintainability and scalability',
-  //   ],
-  //   tags: ['HTML5', 'CSS3', 'Bootstrap 5', 'JavaScript', 'PHP'],
-  //   link: 'https://goldencupemc.netlify.app/',
-  //   github: 'https://github.com/ElijahZacarias02/goldencupemc',
-  //   image: goldencupemcImage,
-  // },
+  {
+    title: 'GoldenCupEMC',
+    description:
+      "GoldenCupEMC's website was built from the ground up as a promotional tool, aiming to boost the business's online presence and attract new customers. With no prior design elements to work from, the project required a complete start. My focus was on understanding the company's objectives, organizing the website's content, and mapping out the user experience. This approach allowed me to develop a modern, user-friendly design that clearly presented the services offered and facilitated easy communication for potential clients.",
+    impact:
+      'Improved brand visibility and increased user engagement by delivering a fully responsive landing page that streamlined service inquiries across all devices.',
+    role: 'Front-End Web Developer',
+    responsibilities: [
+      'Designed and implemented a responsive landing page from the ground up',
+      'Ensured cross-browser and cross-device compatibility for consistent user experience',
+      'Optimized website performance, accessibility, and loading speed',
+      'Translated business requirements into clean, maintainable, and scalable front-end code',
+      'Implemented reusable and well-organized components to improve maintainability and scalability',
+    ],
+    tags: ['HTML5', 'CSS3', 'Bootstrap 5', 'JavaScript', 'PHP'],
+    link: 'https://goldencupemc.netlify.app/',
+    github: 'https://github.com/ElijahZacarias02/goldencupemc',
+    image: goldencupemcImage,
+  },
 
   {
     title: 'EXODiA PRO',
@@ -91,6 +91,18 @@ const skills = {
 }
 
 const experience = [
+{
+    role: 'Javascript Engineer',
+    company: 'Aderize',
+    period: 'April 2026 - Present',
+    summaries: [
+      'Developed and maintained web-based applications supporting finance, HR, and transaction-processing services, ensuring stable daily operations.',
+      'Optimized database queries and reporting workflows to improve payroll and HR system performance and data reliability for client operations.',
+      'Maintained and enhanced legacy systems used by multiple clients while introducing modern UI/UX improvements, delivering usability gains with zero downtime or service disruption.',
+      'Designed and implemented automated payroll and HR reporting processes, reducing manual Excel-based reporting and improving overall data accuracy.',
+      'Collaborated with cross-functional teams to deliver new features and resolve production issues across client-facing applications, improving turnaround time and system stability.',
+    ],
+  },
   {
     role: 'Web Developer',
     company: 'Prople BPO, Inc.',
@@ -144,10 +156,83 @@ const mobileNavOpen = ref(false)
 const showAllProjects = ref(false)
 const visibleProjects = computed(() => (showAllProjects.value ? projects : projects.slice(0, 2)))
 let observer
-let typedInstance = null
-const typedElement = ref(null)
 let scrollHandler = null
 let scrollTimeout = null
+let parallaxRaf = null
+let parallaxScheduled = false
+let motionMediaQuery = null
+let onMotionPreferenceChange = null
+let onParallaxResize = null
+
+const parallaxEnabled = ref(true)
+const MOBILE_PARALLAX_MAX = 768
+
+const isMobileParallaxViewport = () => window.innerWidth <= MOBILE_PARALLAX_MAX
+
+const getSectionCenterDelta = (section) => {
+  if (!section) return 0
+  const rect = section.getBoundingClientRect()
+  const vh = window.innerHeight
+  if (rect.bottom < 0 || rect.top > vh) return 0
+  return vh / 2 - (rect.top + rect.height / 2)
+}
+
+const parallaxYForElement = (el, speed) => {
+  const section = el.closest('section')
+  return getSectionCenterDelta(section) * speed
+}
+
+const resetParallaxTransforms = () => {
+  document.querySelectorAll('[data-parallax-speed], [data-parallax-content]').forEach((el) => {
+    el.style.transform = ''
+  })
+  document.querySelectorAll('.parallax-image').forEach((img) => {
+    img.style.transform = ''
+  })
+}
+
+const updateParallax = () => {
+  if (!parallaxEnabled.value) {
+    resetParallaxTransforms()
+    return
+  }
+
+  document.querySelectorAll('[data-parallax-speed]').forEach((el) => {
+    const speed = parseFloat(el.getAttribute('data-parallax-speed') || '0')
+    const y = parallaxYForElement(el, speed)
+    el.style.transform = `translate3d(0, ${y}px, 0)`
+  })
+
+  const mobile = isMobileParallaxViewport()
+
+  document.querySelectorAll('[data-parallax-content]').forEach((el) => {
+    if (mobile) {
+      el.style.transform = ''
+      return
+    }
+    const speed = parseFloat(el.getAttribute('data-parallax-content') || '0.07')
+    let y = parallaxYForElement(el, speed)
+    y = Math.max(-20, Math.min(20, y))
+    el.style.transform = `translate3d(0, ${y}px, 0)`
+  })
+
+  document.querySelectorAll('.parallax-image').forEach((img) => {
+    if (mobile) {
+      img.style.transform = ''
+      return
+    }
+    const frame = img.closest('.project_image')
+    if (!frame) return
+    const rect = frame.getBoundingClientRect()
+    if (rect.bottom < 0 || rect.top > window.innerHeight) {
+      img.style.transform = ''
+      return
+    }
+    const centerDelta = window.innerHeight / 2 - (rect.top + rect.height / 2)
+    const y = centerDelta * 0.16
+    img.style.transform = `translate3d(0, ${y}px, 0) scale(1.1)`
+  })
+}
 
 const contactForm = ref({
   name: '',
@@ -266,6 +351,7 @@ const toggleProjects = () => {
   requestAnimationFrame(() => {
     window.dispatchEvent(new Event('resize'))
   })
+  nextTick(() => updateParallax())
 }
 
 onMounted(() => {
@@ -283,13 +369,14 @@ onMounted(() => {
     setTimeout(() => {
       isLoading.value = false
       document.body.style.overflow = ''
-    }, 800)
+      requestAnimationFrame(updateParallax)
+    }, 700)
   }
 
   if (document.readyState === 'complete') {
     hideLoading()
   } else {
-    window.addEventListener('load', hideLoading)
+    window.addEventListener('load', hideLoading, { once: true })
   }
 
   const sections = document.querySelectorAll('section[id]')
@@ -340,58 +427,75 @@ onMounted(() => {
 
   sections.forEach((section) => observer.observe(section))
 
+  const refreshParallaxSetting = () => {
+    const reducedMotion = motionMediaQuery?.matches ?? false
+    parallaxEnabled.value = !reducedMotion
+    updateParallax()
+  }
+
+  onParallaxResize = refreshParallaxSetting
+
+  motionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+  onMotionPreferenceChange = () => refreshParallaxSetting()
+  motionMediaQuery.addEventListener('change', onMotionPreferenceChange)
+  window.addEventListener('resize', onParallaxResize, { passive: true })
+  refreshParallaxSetting()
+
   scrollHandler = () => {
+    if (!parallaxScheduled) {
+      parallaxScheduled = true
+      parallaxRaf = requestAnimationFrame(() => {
+        parallaxScheduled = false
+        updateParallax()
+      })
+    }
     clearTimeout(scrollTimeout)
     scrollTimeout = setTimeout(updateActiveSection, 10)
   }
   window.addEventListener('scroll', scrollHandler, { passive: true })
 
   updateActiveSection()
+  updateParallax()
+})
 
-  nextTick(() => {
-    if (typedElement.value) {
-      typedInstance = new Typed(typedElement.value, {
-        strings: ['Front-End Web Development', 'Back-End Web Development'],
-        typeSpeed: 50,
-        backSpeed: 30,
-        backDelay: 2000,
-        loop: true,
-        showCursor: true,
-        cursorChar: '|',
-        smartBackspace: true,
-      })
-    }
-  })
+watch(isLoading, (loading) => {
+  if (!loading) {
+    requestAnimationFrame(updateParallax)
+  }
 })
 
 onBeforeUnmount(() => {
   if (observer) observer.disconnect()
-  if (typedInstance) typedInstance.destroy()
   if (scrollHandler) {
     window.removeEventListener('scroll', scrollHandler)
   }
   if (scrollTimeout) {
     clearTimeout(scrollTimeout)
   }
+  if (parallaxRaf) {
+    cancelAnimationFrame(parallaxRaf)
+  }
+  if (motionMediaQuery && onMotionPreferenceChange) {
+    motionMediaQuery.removeEventListener('change', onMotionPreferenceChange)
+  }
+  if (onParallaxResize) {
+    window.removeEventListener('resize', onParallaxResize)
+  }
 })
 </script>
 
 <template>
   <Transition name="loading-fade">
-    <div v-if="isLoading" class="loading-page">
+    <div v-if="isLoading" class="loading-page" aria-live="polite" aria-busy="true">
       <div class="loading-content">
-        <div class="loading-spinner">
-          <div class="spinner-ring"></div>
-          <div class="spinner-ring"></div>
-          <div class="spinner-ring"></div>
-        </div>
-        <h2 class="loading-text">Elijah Zacarias</h2>
-        <p class="loading-subtext">Loading Portfolio...</p>
+        <div class="loading-spinner" aria-hidden="true"></div>
+        <p class="loading-name">Elijah Zacarias</p>
+        <p class="loading-label">Loading...</p>
       </div>
     </div>
   </Transition>
 
-  <div class="page" :class="{ 'page-loaded': !isLoading, 'mobile-nav-open': mobileNavOpen }">
+  <div class="page" :class="{ 'mobile-nav-open': mobileNavOpen, 'page-ready': !isLoading }">
     <header class="topbar">
       <div class="topbar_inner">
         <div class="brand">Elijah Zacarias</div>
@@ -486,42 +590,44 @@ onBeforeUnmount(() => {
     </header>
 
     <main class="content">
-      <section class="hero" id="hero">
-        <div class="hero_copy">
-          <div class="hero_greeting">
-            <span class="greeting-text">Hello There!</span>
+      <section class="hero section-parallax-wrap section-parallax-wrap--hero" id="hero">
+        <SectionParallaxDecor variant="hero" />
+        <div class="hero_inner section-parallax__inner">
+          <div class="hero_copy" data-parallax-content="0.1">
+            <div class="hero_greeting">
+              <span class="greeting-text">Hello There!</span>
+            </div>
+            <h1>I'm <span class="grad">Elijah Zacarias</span></h1>
+            <p class="hero_subtitle">Full-Stack Web Developer</p>
+            <p class="intro-text">
+              I develop intuitive, user-friendly web applications tailored to client requirements,
+              with a strong focus on detail, scalability, and performance.
+            </p>
+            <div class="hero_actions">
+              <a class="button primary" href="#" @click.prevent="downloadResume"
+                >Download my resume</a
+              >
+              <a class="button ghost" href="#projects" @click.prevent="handleNavClick('projects')"
+                >View Projects</a
+              >
+              <a class="button ghost" href="#contact" @click.prevent="handleNavClick('contact')"
+                >Contact Me</a
+              >
+            </div>
           </div>
-          <h1>I'm <span class="grad">Elijah Zacarias</span></h1>
-          <p class="hero_into">
-            <span class="hero_value">I am into</span>
-            <span ref="typedElement" class="typed-text"></span>
-          </p>
-          <p class="intro-text">
-            I develop intuitive, user-friendly web applications tailored to client requirements,
-            with a strong focus on detail, scalability, and performance.
-          </p>
-          <div class="hero_actions">
-            <a class="button primary" href="#" @click.prevent="downloadResume"
-              >Download my resume</a
-            >
-            <a class="button ghost" href="#projects" @click.prevent="handleNavClick('projects')"
-              >View Projects</a
-            >
-            <a class="button ghost" href="#contact" @click.prevent="handleNavClick('contact')"
-              >Contact Me</a
-            >
+          <div class="hero_card" data-parallax-content="-0.08">
+            <img :src="avatarImage" alt="Elijah Zacarias" class="hero_avatar" />
           </div>
-        </div>
-        <div class="hero_card">
-          <img :src="avatarImage" alt="Elijah Zacarias" class="hero_avatar" />
         </div>
       </section>
 
-      <section class="panel" id="about">
+      <section class="panel section-parallax-wrap" id="about">
+        <SectionParallaxDecor variant="about" />
+        <div class="section-parallax__inner">
         <div class="panel_header">
           <h2>About Me</h2>
         </div>
-        <div class="about_content">
+        <div class="about_content" data-parallax-content="0.04">
           <p class="intro-text">
             {{ aboutExpanded ? aboutText : aboutPreview }}
           </p>
@@ -553,13 +659,16 @@ onBeforeUnmount(() => {
             </span>
           </button>
         </div>
+        </div>
       </section>
 
-      <section class="panel" id="skills">
+      <section class="panel section-parallax-wrap" id="skills">
+        <SectionParallaxDecor variant="skills" />
+        <div class="section-parallax__inner">
         <div class="panel_header">
           <h2>Tech Stacks</h2>
         </div>
-        <div class="skills">
+        <div class="skills" data-parallax-content="0.035">
           <div v-for="(items, category) in skills" :key="category" class="skill-block">
             <h3>
               <span class="skill-icon" aria-hidden="true">
@@ -640,16 +749,23 @@ onBeforeUnmount(() => {
             </div>
           </div>
         </div>
+        </div>
       </section>
 
-      <section class="panel" id="projects">
+      <section class="panel section-parallax-wrap" id="projects">
+        <SectionParallaxDecor variant="projects" />
+        <div class="section-parallax__inner">
         <div class="panel_header">
           <h2>Projects</h2>
         </div>
-        <div class="projects_grid">
+        <div class="projects_grid" data-parallax-content="0.03">
           <article v-for="project in visibleProjects" :key="project.title" class="project_card">
             <div v-if="project.image" class="project_image">
-              <img :src="project.image" :alt="project.title" />
+              <img
+                class="parallax-image"
+                :src="project.image"
+                :alt="project.title"
+              />
             </div>
             <div v-else class="project_image_placeholder">
               <svg
@@ -790,13 +906,16 @@ onBeforeUnmount(() => {
             {{ showAllProjects ? 'View fewer projects' : 'View more projects' }}
           </button>
         </div>
+        </div>
       </section>
 
-      <section class="panel" id="experience">
+      <section class="panel section-parallax-wrap" id="experience">
+        <SectionParallaxDecor variant="experience" />
+        <div class="section-parallax__inner">
         <div class="panel_header">
           <h2>Experience</h2>
         </div>
-        <div class="experience">
+        <div class="experience" data-parallax-content="0.035">
           <div class="timeline">
             <div v-for="item in experience" :key="item.role" class="timeline_item">
               <div class="timeline_dot" />
@@ -812,13 +931,16 @@ onBeforeUnmount(() => {
             </div>
           </div>
         </div>
+        </div>
       </section>
 
-      <section class="panel" id="education">
+      <section class="panel section-parallax-wrap" id="education">
+        <SectionParallaxDecor variant="education" />
+        <div class="section-parallax__inner">
         <div class="panel_header">
           <h2>Education</h2>
         </div>
-        <div class="experience">
+        <div class="experience" data-parallax-content="0.035">
           <div class="timeline">
             <div v-for="item in education" :key="item.degree" class="timeline_item">
               <div class="timeline_dot" />
@@ -829,9 +951,12 @@ onBeforeUnmount(() => {
             </div>
           </div>
         </div>
+        </div>
       </section>
 
-      <section class="cta" id="contact">
+      <section class="cta section-parallax-wrap section-parallax-wrap--contact" id="contact">
+        <SectionParallaxDecor variant="contact" />
+        <div class="section-parallax__inner">
         <div class="contact_header">
           <p class="eyebrow">Let's Make It Happen</p>
           <h2>Have a project in mind?</h2>
@@ -843,7 +968,7 @@ onBeforeUnmount(() => {
             <strong>Open to:</strong> Full-time opportunities • Freelance projects
           </p>
         </div>
-        <div class="contact_content">
+        <div class="contact_content" data-parallax-content="0.04">
           <form class="contact_form" @submit.prevent="submitContactForm">
             <div class="form_group">
               <label for="name">Name</label>
@@ -916,6 +1041,7 @@ onBeforeUnmount(() => {
               </a>
             </div>
           </div>
+        </div>
         </div>
       </section>
     </main>
