@@ -2,9 +2,13 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import avatarImage from './assets/img/Elijah_Avatar.png'
 import SectionParallaxDecor from './components/SectionParallaxDecor.vue'
-import { skillIconByName, skillIconFill } from './skillIconData.js'
+import { skillIconByName, skillIconFill, skillUrlByName } from './skillIconData.js'
 
-const skill = (name) => ({ name, icon: skillIconByName[name] ?? null })
+const skill = (name) => ({
+  name,
+  icon: skillIconByName[name] ?? null,
+  url: skillUrlByName[name] ?? null,
+})
 import exodiaproImage from './assets/img/exodiapro.png'
 import goldencupemcImage from './assets/img/goldencupemc.jpg'
 import resumePdf from './assets/file/Elijah_Zacarias_Resume.pdf'
@@ -724,13 +728,19 @@ onBeforeUnmount(() => {
               {{ category }}
             </h3>
             <div class="tags">
-              <span
+              <component
+                :is="item.url ? 'a' : 'span'"
                 v-for="item in items"
-                :key="typeof item === 'string' ? item : item.name"
+                :key="item.name"
                 class="tag"
+                :class="{ 'tag--link': item.url }"
+                :href="item.url || undefined"
+                :target="item.url ? '_blank' : undefined"
+                :rel="item.url ? 'noopener noreferrer' : undefined"
+                :aria-label="item.url ? `${item.name} (opens in new tab)` : undefined"
               >
                 <svg
-                  v-if="typeof item === 'object' && item.icon"
+                  v-if="item.icon"
                   class="tag-icon-svg"
                   width="16"
                   height="16"
@@ -744,8 +754,8 @@ onBeforeUnmount(() => {
                     :d="item.icon.path"
                   />
                 </svg>
-                {{ typeof item === 'string' ? item : item.name }}
-              </span>
+                {{ item.name }}
+              </component>
             </div>
           </div>
         </div>

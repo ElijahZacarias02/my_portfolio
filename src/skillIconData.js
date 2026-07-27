@@ -75,3 +75,32 @@ export const skillIconByName = {
 export function getSkillIconData(name) {
   return skillIconByName[name] ?? null
 }
+
+/** Official docs / home pages for skill tags (when available). */
+export const skillUrlByName = {
+  HTML5: 'https://developer.mozilla.org/en-US/docs/Web/HTML',
+  CSS3: 'https://developer.mozilla.org/en-US/docs/Web/CSS',
+  'Bootstrap 3, 4, & 5': 'https://getbootstrap.com/',
+  'Tailwind CSS': 'https://tailwindcss.com/',
+  JavaScript: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
+  jQuery: 'https://jquery.com/',
+  Ajax: 'https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX',
+  Vue: 'https://vuejs.org/',
+  React: 'https://react.dev/',
+  PHP: 'https://www.php.net/',
+  'CodeIgniter (2, 3 & 4 - MVC)': 'https://codeigniter.com/',
+  Laravel: 'https://laravel.com/',
+  'Express.js': 'https://expressjs.com/',
+  'Node.js': 'https://nodejs.org/',
+  MySQL: 'https://www.mysql.com/',
+  MongoDB: 'https://www.mongodb.com/',
+  Supabase: 'https://supabase.com/',
+  'Version Control (Git & SVN)': 'https://git-scm.com/',
+  GitHub: 'https://github.com/',
+  'VS Code': 'https://code.visualstudio.com/',
+  Postman: 'https://www.postman.com/',
+}
+
+export function getSkillUrl(name) {
+  return skillUrlByName[name] ?? null
+}
