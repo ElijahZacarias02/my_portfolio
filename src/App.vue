@@ -1016,8 +1016,28 @@ onBeforeUnmount(() => {
             <div v-if="submitMessage" class="form_status" :class="submitStatus">
               {{ submitMessage }}
             </div>
-            <button type="submit" :disabled="isSubmitting" class="button primary">
-              {{ isSubmitting ? 'Sending...' : 'Send Message' }}
+            <button
+              type="submit"
+              :disabled="isSubmitting"
+              class="button primary contact_submit"
+            >
+              {{ isSubmitting ? 'Sending...' : 'Send message' }}
+              <svg
+                v-if="!isSubmitting"
+                class="contact_submit_icon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m13 6 6 6-6 6" />
+              </svg>
             </button>
           </form>
           <div class="contact_social">
