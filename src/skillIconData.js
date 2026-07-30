@@ -72,10 +72,6 @@ export const skillIconByName = {
   Postman: bySimple(siPostman),
 }
 
-export function getSkillIconData(name) {
-  return skillIconByName[name] ?? null
-}
-
 /** Official docs / home pages for skill tags (when available). */
 export const skillUrlByName = {
   HTML5: 'https://developer.mozilla.org/en-US/docs/Web/HTML',
@@ -99,8 +95,4 @@ export const skillUrlByName = {
   GitHub: 'https://github.com/',
   'VS Code': 'https://code.visualstudio.com/',
   Postman: 'https://www.postman.com/',
-}
-
-export function getSkillUrl(name) {
-  return skillUrlByName[name] ?? null
 }

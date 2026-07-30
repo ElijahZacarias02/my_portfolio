@@ -1,17 +1,21 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { siGithub } from 'simple-icons'
 import avatarImage from './assets/img/Elijah_Avatar.png'
+import exodiaproImage from './assets/img/exodiapro.webp'
+import goldencupemcImage from './assets/img/goldencupemc.jpg'
+import resumePdf from './assets/file/Elijah_Zacarias_Resume.pdf'
 import SectionParallaxDecor from './components/SectionParallaxDecor.vue'
 import { skillIconByName, skillIconFill, skillUrlByName } from './skillIconData.js'
+
+const githubIconPath = siGithub.path
 
 const skill = (name) => ({
   name,
   icon: skillIconByName[name] ?? null,
   url: skillUrlByName[name] ?? null,
 })
-import exodiaproImage from './assets/img/exodiapro.png'
-import goldencupemcImage from './assets/img/goldencupemc.jpg'
-import resumePdf from './assets/file/Elijah_Zacarias_Resume.pdf'
+
 const projects = [
   {
     title: 'GoldenCupEMC',
@@ -95,16 +99,16 @@ const skills = {
 }
 
 const experience = [
-{
-    role: 'Javascript Engineer',
+  {
+    role: 'JavaScript Engineer',
     company: 'Aderize',
-    period: 'April 2026 - Present',
+    period: 'April 2026 - July 2026',
     summaries: [
-      'Developed and maintained web-based applications supporting finance, HR, and transaction-processing services, ensuring stable daily operations.',
-      'Optimized database queries and reporting workflows to improve payroll and HR system performance and data reliability for client operations.',
-      'Maintained and enhanced legacy systems used by multiple clients while introducing modern UI/UX improvements, delivering usability gains with zero downtime or service disruption.',
-      'Designed and implemented automated payroll and HR reporting processes, reducing manual Excel-based reporting and improving overall data accuracy.',
-      'Collaborated with cross-functional teams to deliver new features and resolve production issues across client-facing applications, improving turnaround time and system stability.',
+      'Developed and delivered 5+ responsive Rich Media advertisements and interactive web interfaces using JavaScript, HTML, and CSS, ensuring high-quality, cross-browser compatible solutions.',
+      'Maintained and enhanced an existing codebase across 5+ advertising campaigns, improving application stability, performance, and long-term maintainability.',
+      'Diagnosed and resolved 5+ technical issues and bugs, minimizing disruptions and ensuring timely project delivery.',
+      'Collaborated with designers, QA engineers, and project managers to successfully deliver 10+ client projects while meeting quality and deadline expectations.',
+      'Kept current with emerging web technologies and development best practices, applying modern techniques to improve code quality and user experience.',
     ],
   },
   {
@@ -112,11 +116,11 @@ const experience = [
     company: 'Prople BPO, Inc.',
     period: 'Nov 2023 — March 2026',
     summaries: [
-      'Developed and maintained web-based applications supporting finance, HR, and transaction-processing services, ensuring stable daily operations.',
-      'Optimized database queries and reporting workflows to improve payroll and HR system performance and data reliability for client operations.',
+      'Developed and maintained web-based applications supporting finance, HR, and transaction-processing services for 10+ client accounts, ensuring stable daily operations.',
+      'Optimized database queries and reporting workflows, reducing payroll and HR system load times by 40% and improving data reliability for client operations.',
       'Maintained and enhanced legacy systems used by multiple clients while introducing modern UI/UX improvements, delivering usability gains with zero downtime or service disruption.',
-      'Designed and implemented automated payroll and HR reporting processes, reducing manual Excel-based reporting and improving overall data accuracy.',
-      'Collaborated with cross-functional teams to deliver new features and resolve production issues across client-facing applications, improving turnaround time and system stability.',
+      'Designed and implemented automated payroll and HR reporting processes, reducing manual Excel-based reporting by 60–70% and improving overall data accuracy.',
+      'Collaborated with cross-functional teams to deliver new features and resolve production issues across 5+ client-facing applications, reducing turnaround time and improving system stability.',
     ],
   },
   {
@@ -124,10 +128,10 @@ const experience = [
     company: 'LUCKY 8 STAR QUEST INC.',
     period: 'Oct 2020 — Oct 2023',
     summaries: [
-      'Developed and maintained web applications supporting gaming and entertainment operations, improving system reliability and user workflows.',
-      'Automated manual operational processes using web technologies and backend systems (CodeIgniter 3, MySQL), increasing efficiency and reducing repetitive tasks.',
+      'Developed and maintained web applications supporting gaming and entertainment operations, improving system reliability and user workflows for 300+ daily active users.',
+      'Automated manual operational processes using web technologies and backend systems (CodeIgniter 3, MySQL), increasing efficiency by 60% and significantly reducing repetitive tasks.',
       'Designed, managed, and optimized MySQL databases supporting high-volume daily usage, ensuring data integrity, fast query performance, and minimal downtime.',
-      'Built custom APIs and integrated system modules to streamline gaming and reporting workflows, reducing data processing errors and enabling real-time data access.',
+      'Built custom APIs and integrated system modules to streamline gaming and reporting workflows, reducing data processing errors by 30–40% and enabling real-time data access.',
       'Implemented responsive web design techniques to ensure consistent performance across mobile, tablet, and desktop devices, improving usability and reducing support requests.',
     ],
   },
@@ -136,11 +140,11 @@ const experience = [
     company: 'Freelance (Part-time)',
     period: 'June 2018 — March 2026',
     summaries: [
-      'Delivered responsive, client-focused websites, integrating SEO best practices (semantic HTML, optimized metadata, Core Web Vitals, and mobile-first design) to improve usability, performance, and search visibility across devices.',
+      'Delivered responsive, client-focused websites for 10+ freelance clients, improving usability, performance, and visual consistency across devices.',
       'Collaborated directly with clients to gather requirements, iterate on feedback, and deliver projects on schedule.',
-      'Translated UI/UX designs into pixel-accurate, accessible interfaces, reducing design-to-development revisions.',
-      'Implemented mobile-first and responsive design approaches, improving user engagement on mobile devices.',
-      'Maintained and enhanced existing websites by resolving UI issues and implementing improvements that reduced support requests.',
+      'Collaborated with back-end developers and web designers to improve usability.',
+      'Implemented mobile-first and responsive design approaches, resulting in 20–30% higher user engagement on mobile devices.',
+      'Maintained and enhanced existing websites by resolving UI issues and implementing improvements that reduced support requests by 30%.',
     ],
   },
 ]
@@ -157,40 +161,41 @@ const activeSection = ref('hero')
 const theme = ref('light')
 const isLoading = ref(true)
 const mobileNavOpen = ref(false)
+const navToggleRef = ref(null)
 const showAllProjects = ref(false)
 const visibleProjects = computed(() => (showAllProjects.value ? projects : projects.slice(0, 2)))
 let observer
+let revealObserver
 let scrollHandler = null
-let scrollTimeout = null
 let parallaxRaf = null
 let parallaxScheduled = false
 let motionMediaQuery = null
 let onMotionPreferenceChange = null
 let onParallaxResize = null
+let onWindowLoad = null
+let onKeydown = null
+let loadingTimeout = null
+let parallaxElements = []
+let parallaxContentElements = []
+let parallaxImages = []
 
 const parallaxEnabled = ref(true)
 const MOBILE_PARALLAX_MAX = 768
 
 const isMobileParallaxViewport = () => window.innerWidth <= MOBILE_PARALLAX_MAX
 
-const getSectionCenterDelta = (section) => {
-  if (!section) return 0
-  const rect = section.getBoundingClientRect()
-  const vh = window.innerHeight
-  if (rect.bottom < 0 || rect.top > vh) return 0
-  return vh / 2 - (rect.top + rect.height / 2)
-}
-
-const parallaxYForElement = (el, speed) => {
-  const section = el.closest('section')
-  return getSectionCenterDelta(section) * speed
+const cacheParallaxElements = () => {
+  parallaxElements = [...document.querySelectorAll('[data-parallax-speed]')]
+  parallaxContentElements = [...document.querySelectorAll('[data-parallax-content]')]
+  parallaxImages = [...document.querySelectorAll('.parallax-image')]
 }
 
 const resetParallaxTransforms = () => {
-  document.querySelectorAll('[data-parallax-speed], [data-parallax-content]').forEach((el) => {
+  const transformedElements = [...parallaxElements, ...parallaxContentElements]
+  transformedElements.forEach((el) => {
     el.style.transform = ''
   })
-  document.querySelectorAll('.parallax-image').forEach((img) => {
+  parallaxImages.forEach((img) => {
     img.style.transform = ''
   })
 }
@@ -201,26 +206,42 @@ const updateParallax = () => {
     return
   }
 
-  document.querySelectorAll('[data-parallax-speed]').forEach((el) => {
+  const viewportHeight = window.innerHeight
+  const sectionDeltas = new Map()
+  const getSectionDelta = (el) => {
+    const section = el.closest('section')
+    if (!section) return 0
+    if (sectionDeltas.has(section)) return sectionDeltas.get(section)
+
+    const rect = section.getBoundingClientRect()
+    const delta =
+      rect.bottom < 0 || rect.top > viewportHeight
+        ? 0
+        : viewportHeight / 2 - (rect.top + rect.height / 2)
+    sectionDeltas.set(section, delta)
+    return delta
+  }
+
+  parallaxElements.forEach((el) => {
     const speed = parseFloat(el.getAttribute('data-parallax-speed') || '0')
-    const y = parallaxYForElement(el, speed)
+    const y = getSectionDelta(el) * speed
     el.style.transform = `translate3d(0, ${y}px, 0)`
   })
 
   const mobile = isMobileParallaxViewport()
 
-  document.querySelectorAll('[data-parallax-content]').forEach((el) => {
+  parallaxContentElements.forEach((el) => {
     if (mobile) {
       el.style.transform = ''
       return
     }
     const speed = parseFloat(el.getAttribute('data-parallax-content') || '0.07')
-    let y = parallaxYForElement(el, speed)
+    let y = getSectionDelta(el) * speed
     y = Math.max(-20, Math.min(20, y))
     el.style.transform = `translate3d(0, ${y}px, 0)`
   })
 
-  document.querySelectorAll('.parallax-image').forEach((img) => {
+  parallaxImages.forEach((img) => {
     if (mobile) {
       img.style.transform = ''
       return
@@ -228,11 +249,11 @@ const updateParallax = () => {
     const frame = img.closest('.project_image')
     if (!frame) return
     const rect = frame.getBoundingClientRect()
-    if (rect.bottom < 0 || rect.top > window.innerHeight) {
+    if (rect.bottom < 0 || rect.top > viewportHeight) {
       img.style.transform = ''
       return
     }
-    const centerDelta = window.innerHeight / 2 - (rect.top + rect.height / 2)
+    const centerDelta = viewportHeight / 2 - (rect.top + rect.height / 2)
     const y = centerDelta * 0.16
     img.style.transform = `translate3d(0, ${y}px, 0) scale(1.1)`
   })
@@ -323,15 +344,26 @@ const downloadResume = () => {
 const applyTheme = (value) => {
   document.documentElement.setAttribute('data-theme', value)
   localStorage.setItem('theme', value)
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute('content', value === 'dark' ? '#0f172a' : '#ffffff')
+}
+
+const closeMobileNav = (returnFocus = true) => {
+  if (!mobileNavOpen.value) return
+  mobileNavOpen.value = false
+  if (returnFocus) {
+    nextTick(() => navToggleRef.value?.focus())
+  }
 }
 
 const handleNavClick = (id) => {
-  mobileNavOpen.value = false
+  closeMobileNav(false)
   const el = document.getElementById(id)
   if (el) {
     const header = document.querySelector('.topbar')
     const headerHeight = header ? header.offsetHeight : 20
-    const elementPosition = el.getBoundingClientRect().top + window.pageYOffset
+    const elementPosition = el.getBoundingClientRect().top + window.scrollY
     const offsetPosition = elementPosition - headerHeight - 20
 
     window.scrollTo({
@@ -342,7 +374,13 @@ const handleNavClick = (id) => {
 }
 
 const toggleMobileNav = () => {
-  mobileNavOpen.value = !mobileNavOpen.value
+  const willOpen = !mobileNavOpen.value
+  mobileNavOpen.value = willOpen
+  if (willOpen) {
+    nextTick(() => {
+      document.getElementById('mobile-navigation')?.querySelector('a')?.focus()
+    })
+  }
 }
 
 const toggleTheme = () => {
@@ -352,10 +390,10 @@ const toggleTheme = () => {
 
 const toggleProjects = () => {
   showAllProjects.value = !showAllProjects.value
-  requestAnimationFrame(() => {
+  nextTick(() => {
+    cacheParallaxElements()
     window.dispatchEvent(new Event('resize'))
   })
-  nextTick(() => updateParallax())
 }
 
 onMounted(() => {
@@ -370,7 +408,7 @@ onMounted(() => {
   document.body.style.overflow = 'hidden'
 
   const hideLoading = () => {
-    setTimeout(() => {
+    loadingTimeout = window.setTimeout(() => {
       isLoading.value = false
       document.body.style.overflow = ''
       requestAnimationFrame(updateParallax)
@@ -380,29 +418,11 @@ onMounted(() => {
   if (document.readyState === 'complete') {
     hideLoading()
   } else {
-    window.addEventListener('load', hideLoading, { once: true })
+    onWindowLoad = hideLoading
+    window.addEventListener('load', onWindowLoad, { once: true })
   }
 
   const sections = document.querySelectorAll('section[id]')
-  const header = document.querySelector('.topbar')
-  const headerHeight = header ? header.offsetHeight : 80
-
-  const updateActiveSection = () => {
-    const scrollPosition = window.scrollY + headerHeight + 100
-
-    let currentSection = 'hero'
-    sections.forEach((section) => {
-      const sectionTop = section.offsetTop
-      const sectionHeight = section.offsetHeight
-
-      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-        currentSection = section.id
-      }
-    })
-
-    activeSection.value = currentSection
-  }
-
   const intersectingSections = new Map()
 
   observer = new IntersectionObserver(
@@ -431,14 +451,50 @@ onMounted(() => {
 
   sections.forEach((section) => observer.observe(section))
 
+  const revealTargets = document.querySelectorAll(
+    [
+      '.panel_header',
+      '.about_content',
+      '.skills',
+      '.projects_grid',
+      '.projects_actions',
+      '.experience',
+      '.contact_header',
+      '.contact_content',
+    ].join(','),
+  )
+
+  revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        entry.target.classList.add('reveal-item--visible')
+        revealObserver.unobserve(entry.target)
+      })
+    },
+    {
+      threshold: 0.12,
+      rootMargin: '0px 0px -8% 0px',
+    },
+  )
+
+  revealTargets.forEach((element) => {
+    element.classList.add('reveal-item')
+    revealObserver.observe(element)
+  })
+
   const refreshParallaxSetting = () => {
     const reducedMotion = motionMediaQuery?.matches ?? false
     parallaxEnabled.value = !reducedMotion
     updateParallax()
   }
 
-  onParallaxResize = refreshParallaxSetting
+  onParallaxResize = () => {
+    cacheParallaxElements()
+    refreshParallaxSetting()
+  }
 
+  cacheParallaxElements()
   motionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
   onMotionPreferenceChange = () => refreshParallaxSetting()
   motionMediaQuery.addEventListener('change', onMotionPreferenceChange)
@@ -453,12 +509,16 @@ onMounted(() => {
         updateParallax()
       })
     }
-    clearTimeout(scrollTimeout)
-    scrollTimeout = setTimeout(updateActiveSection, 10)
   }
   window.addEventListener('scroll', scrollHandler, { passive: true })
 
-  updateActiveSection()
+  onKeydown = (event) => {
+    if (event.key === 'Escape' && mobileNavOpen.value) {
+      closeMobileNav()
+    }
+  }
+  document.addEventListener('keydown', onKeydown)
+
   updateParallax()
 })
 
@@ -470,15 +530,23 @@ watch(isLoading, (loading) => {
 
 onBeforeUnmount(() => {
   if (observer) observer.disconnect()
+  if (revealObserver) revealObserver.disconnect()
   if (scrollHandler) {
     window.removeEventListener('scroll', scrollHandler)
-  }
-  if (scrollTimeout) {
-    clearTimeout(scrollTimeout)
   }
   if (parallaxRaf) {
     cancelAnimationFrame(parallaxRaf)
   }
+  if (loadingTimeout) {
+    clearTimeout(loadingTimeout)
+  }
+  if (onWindowLoad) {
+    window.removeEventListener('load', onWindowLoad)
+  }
+  if (onKeydown) {
+    document.removeEventListener('keydown', onKeydown)
+  }
+  document.body.style.overflow = ''
   if (motionMediaQuery && onMotionPreferenceChange) {
     motionMediaQuery.removeEventListener('change', onMotionPreferenceChange)
   }
@@ -509,12 +577,53 @@ onBeforeUnmount(() => {
             :key="link.id"
             :href="`#${link.id}`"
             :class="[{ active: activeSection === link.id }]"
+            :aria-current="activeSection === link.id ? 'page' : undefined"
             @click.prevent="handleNavClick(link.id)"
           >
             {{ link.label }}
           </a>
         </nav>
         <div class="topbar_actions">
+          <div class="nav_socials" aria-label="Social links">
+            <a
+              class="nav_social_link"
+              href="https://linkedin.com/in/ebzacarias"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn (opens in a new tab)"
+              title="LinkedIn"
+            >
+              <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                />
+              </svg>
+            </a>
+            <a
+              class="nav_social_link"
+              href="https://github.com/ElijahZacarias02"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub (opens in a new tab)"
+              title="GitHub"
+            >
+              <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path :d="githubIconPath" />
+              </svg>
+            </a>
+          </div>
           <button
             class="toggle"
             type="button"
@@ -557,10 +666,12 @@ onBeforeUnmount(() => {
             <span class="toggle_label">{{ theme === 'light' ? 'Dark' : 'Light' }} Mode</span>
           </button>
           <button
+            ref="navToggleRef"
             class="nav_toggle"
             type="button"
             aria-label="Toggle menu"
             :aria-expanded="mobileNavOpen"
+            aria-controls="mobile-navigation"
             @click="toggleMobileNav"
           >
             <span class="nav_toggle_bar" :class="{ open: mobileNavOpen }"></span>
@@ -574,21 +685,45 @@ onBeforeUnmount(() => {
           v-if="mobileNavOpen"
           class="nav_backdrop"
           aria-hidden="true"
-          @click="mobileNavOpen = false"
+          @click="closeMobileNav(false)"
         ></div>
       </Transition>
       <Transition name="mobile-nav-slide">
-        <nav v-if="mobileNavOpen" class="nav nav_mobile" aria-label="Mobile navigation">
+        <nav
+          v-if="mobileNavOpen"
+          id="mobile-navigation"
+          class="nav nav_mobile"
+          aria-label="Mobile navigation"
+        >
           <div class="nav_mobile_brand">Elijah Zacarias</div>
           <a
             v-for="link in navLinks"
             :key="link.id"
             :href="`#${link.id}`"
             :class="[{ active: activeSection === link.id }]"
+            :aria-current="activeSection === link.id ? 'page' : undefined"
             @click.prevent="handleNavClick(link.id)"
           >
             {{ link.label }}
           </a>
+          <div class="nav_mobile_socials">
+            <a
+              href="https://linkedin.com/in/ebzacarias"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn (opens in a new tab)"
+            >
+              LinkedIn
+            </a>
+            <a
+              href="https://github.com/ElijahZacarias02"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub (opens in a new tab)"
+            >
+              GitHub
+            </a>
+          </div>
         </nav>
       </Transition>
     </header>
@@ -598,16 +733,16 @@ onBeforeUnmount(() => {
         <SectionParallaxDecor variant="hero" />
         <div class="hero_inner section-parallax__inner">
           <div class="hero_copy" data-parallax-content="0.1">
-            <div class="hero_greeting">
+            <div class="hero_greeting hero-intro hero-intro--1">
               <span class="greeting-text">Hello There!</span>
             </div>
-            <h1>I'm <span class="grad">Elijah Zacarias</span></h1>
-            <p class="hero_subtitle">Full-Stack Web Developer</p>
-            <p class="intro-text">
+            <h1 class="hero-intro hero-intro--2">I'm <span class="grad">Elijah Zacarias</span></h1>
+            <p class="hero_subtitle hero-intro hero-intro--3">Full-Stack Web Developer</p>
+            <p class="intro-text hero-intro hero-intro--4">
               I develop intuitive, user-friendly web applications tailored to client requirements,
               with a strong focus on detail, scalability, and performance.
             </p>
-            <div class="hero_actions">
+            <div class="hero_actions hero-intro hero-intro--5">
               <a class="button primary" href="#" @click.prevent="downloadResume"
                 >Download my resume</a
               >
@@ -619,8 +754,16 @@ onBeforeUnmount(() => {
               >
             </div>
           </div>
-          <div class="hero_card" data-parallax-content="-0.08">
-            <img :src="avatarImage" alt="Elijah Zacarias" class="hero_avatar" />
+          <div class="hero_card hero-intro hero-intro--avatar" data-parallax-content="-0.08">
+            <img
+              :src="avatarImage"
+              alt="Elijah Zacarias"
+              class="hero_avatar"
+              width="200"
+              height="200"
+              fetchpriority="high"
+              decoding="async"
+            />
           </div>
         </div>
       </section>
@@ -628,450 +771,452 @@ onBeforeUnmount(() => {
       <section class="panel section-parallax-wrap" id="about">
         <SectionParallaxDecor variant="about" />
         <div class="section-parallax__inner">
-        <div class="panel_header">
-          <h2>About Me</h2>
-        </div>
-        <div class="about_content" data-parallax-content="0.04">
-          <p class="intro-text">
-            {{ aboutExpanded ? aboutText : aboutPreview }}
-          </p>
-          <button
-            v-if="aboutNeedsExpand"
-            type="button"
-            class="about_see_more"
-            :aria-expanded="aboutExpanded"
-            @click="aboutExpanded = !aboutExpanded"
-          >
-            <span class="about_see_more_text">{{ aboutExpanded ? 'See less' : 'See more' }}</span>
-            <span
-              class="about_see_more_icon"
-              :class="{ expanded: aboutExpanded }"
-              aria-hidden="true"
+          <div class="panel_header">
+            <h2>About Me</h2>
+          </div>
+          <div class="about_content" data-parallax-content="0.04">
+            <p class="intro-text">
+              {{ aboutExpanded ? aboutText : aboutPreview }}
+            </p>
+            <button
+              v-if="aboutNeedsExpand"
+              type="button"
+              class="about_see_more"
+              :aria-expanded="aboutExpanded"
+              @click="aboutExpanded = !aboutExpanded"
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+              <span class="about_see_more_text">{{ aboutExpanded ? 'See less' : 'See more' }}</span>
+              <span
+                class="about_see_more_icon"
+                :class="{ expanded: aboutExpanded }"
+                aria-hidden="true"
               >
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </span>
-          </button>
-        </div>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </button>
+          </div>
         </div>
       </section>
 
       <section class="panel section-parallax-wrap" id="skills">
         <SectionParallaxDecor variant="skills" />
         <div class="section-parallax__inner">
-        <div class="panel_header">
-          <h2>Tech Stacks</h2>
-        </div>
-        <div class="skills" data-parallax-content="0.035">
-          <div v-for="(items, category) in skills" :key="category" class="skill-block">
-            <h3>
-              <span class="skill-icon" aria-hidden="true">
-                <svg
-                  v-if="category === 'Front-End Web Development'"
-                  class="skill-category-svg"
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linejoin="round"
+          <div class="panel_header">
+            <h2>Tech Stacks</h2>
+          </div>
+          <div class="skills" data-parallax-content="0.035">
+            <div v-for="(items, category) in skills" :key="category" class="skill-block">
+              <h3>
+                <span class="skill-icon" aria-hidden="true">
+                  <svg
+                    v-if="category === 'Front-End Web Development'"
+                    class="skill-category-svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="3.5" y="3.5" width="7" height="7" rx="1" />
+                    <rect x="13.5" y="3.5" width="7" height="7" rx="1" />
+                    <rect x="3.5" y="13.5" width="7" height="7" rx="1" />
+                    <rect x="13.5" y="13.5" width="7" height="7" rx="1" />
+                  </svg>
+                  <svg
+                    v-else-if="category === 'Back-End Web Development'"
+                    class="skill-category-svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <ellipse cx="12" cy="6" rx="7" ry="2.5" />
+                    <path d="M5 6v5c0 1.38 3.13 2.5 7 2.5s7-1.12 7-2.5V6" />
+                    <path d="M5 11v5c0 1.38 3.13 2.5 7 2.5s7-1.12 7-2.5v-5" />
+                  </svg>
+                  <svg
+                    v-else
+                    class="skill-category-svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                    />
+                  </svg>
+                </span>
+                {{ category }}
+              </h3>
+              <div class="tags">
+                <component
+                  :is="item.url ? 'a' : 'span'"
+                  v-for="item in items"
+                  :key="item.name"
+                  class="tag"
+                  :class="{ 'tag--link': item.url }"
+                  :href="item.url || undefined"
+                  :target="item.url ? '_blank' : undefined"
+                  :rel="item.url ? 'noopener noreferrer' : undefined"
+                  :aria-label="item.url ? `${item.name} (opens in new tab)` : undefined"
                 >
-                  <rect x="3.5" y="3.5" width="7" height="7" rx="1" />
-                  <rect x="13.5" y="3.5" width="7" height="7" rx="1" />
-                  <rect x="3.5" y="13.5" width="7" height="7" rx="1" />
-                  <rect x="13.5" y="13.5" width="7" height="7" rx="1" />
-                </svg>
-                <svg
-                  v-else-if="category === 'Back-End Web Development'"
-                  class="skill-category-svg"
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <ellipse cx="12" cy="6" rx="7" ry="2.5" />
-                  <path d="M5 6v5c0 1.38 3.13 2.5 7 2.5s7-1.12 7-2.5V6" />
-                  <path d="M5 11v5c0 1.38 3.13 2.5 7 2.5s7-1.12 7-2.5v-5" />
-                </svg>
-                <svg
-                  v-else
-                  class="skill-category-svg"
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path
-                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
-                  />
-                </svg>
-              </span>
-              {{ category }}
-            </h3>
-            <div class="tags">
-              <component
-                :is="item.url ? 'a' : 'span'"
-                v-for="item in items"
-                :key="item.name"
-                class="tag"
-                :class="{ 'tag--link': item.url }"
-                :href="item.url || undefined"
-                :target="item.url ? '_blank' : undefined"
-                :rel="item.url ? 'noopener noreferrer' : undefined"
-                :aria-label="item.url ? `${item.name} (opens in new tab)` : undefined"
-              >
-                <svg
-                  v-if="item.icon"
-                  class="tag-icon-svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  role="img"
-                  aria-hidden="true"
-                >
-                  <title>{{ item.icon.title }}</title>
-                  <path
-                    :fill="skillIconFill(item.icon.hex, theme === 'dark')"
-                    :d="item.icon.path"
-                  />
-                </svg>
-                {{ item.name }}
-              </component>
+                  <svg
+                    v-if="item.icon"
+                    class="tag-icon-svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    role="img"
+                    aria-hidden="true"
+                  >
+                    <title>{{ item.icon.title }}</title>
+                    <path
+                      :fill="skillIconFill(item.icon.hex, theme === 'dark')"
+                      :d="item.icon.path"
+                    />
+                  </svg>
+                  {{ item.name }}
+                </component>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </section>
 
       <section class="panel section-parallax-wrap" id="projects">
         <SectionParallaxDecor variant="projects" />
         <div class="section-parallax__inner">
-        <div class="panel_header">
-          <h2>Projects</h2>
-        </div>
-        <div class="projects_grid" data-parallax-content="0.03">
-          <article v-for="project in visibleProjects" :key="project.title" class="project_card">
-            <div v-if="project.image" class="project_image">
-              <img
-                class="parallax-image"
-                :src="project.image"
-                :alt="project.title"
-              />
-            </div>
-            <div v-else class="project_image_placeholder">
-              <svg
-                width="48"
-                height="48"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-            </div>
-            <div class="project_content">
-              <div class="project_header">
-                <div>
-                  <h3 class="project_title">{{ project.title }}</h3>
-                  <p v-if="project.role" class="project_role">
-                    <strong>Role:</strong> {{ project.role }}
-                  </p>
+          <div class="panel_header">
+            <h2>Projects</h2>
+          </div>
+          <div class="projects_grid" data-parallax-content="0.03">
+            <article v-for="project in visibleProjects" :key="project.title" class="project_card">
+              <div v-if="project.image" class="project_image">
+                <img
+                  class="parallax-image"
+                  :src="project.image"
+                  :alt="project.title"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div v-else class="project_image_placeholder">
+                <svg
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+              </div>
+              <div class="project_content">
+                <div class="project_header">
+                  <div>
+                    <h3 class="project_title">{{ project.title }}</h3>
+                    <p v-if="project.role" class="project_role">
+                      <strong>Role:</strong> {{ project.role }}
+                    </p>
+                  </div>
+                </div>
+                <p class="project_description">
+                  {{
+                    projectDescExpanded[project.title]
+                      ? project.description
+                      : getProjectDescriptionPreview(project.description)
+                  }}
+                </p>
+                <button
+                  v-if="projectDescriptionNeedsExpand(project.description)"
+                  type="button"
+                  class="about_see_more project_see_more"
+                  :aria-expanded="!!projectDescExpanded[project.title]"
+                  @click="toggleProjectDescription(project.title)"
+                >
+                  <span class="about_see_more_text">
+                    {{ projectDescExpanded[project.title] ? 'See less' : 'See more' }}
+                  </span>
+                  <span
+                    class="about_see_more_icon"
+                    :class="{ expanded: projectDescExpanded[project.title] }"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </span>
+                </button>
+                <p v-if="project.impact" class="project_impact">{{ project.impact }}</p>
+                <div
+                  v-if="project.responsibilities && project.responsibilities.length"
+                  class="project_responsibilities"
+                >
+                  <p class="project_responsibilities_title"><strong>Responsibilities:</strong></p>
+                  <ul class="project_responsibilities_list">
+                    <li v-for="(resp, idx) in project.responsibilities" :key="idx">{{ resp }}</li>
+                  </ul>
+                </div>
+                <div class="project_tags">
+                  <span v-for="tag in project.tags" :key="tag" class="project_tag">{{ tag }}</span>
+                </div>
+                <div class="project_buttons">
+                  <a
+                    v-if="project.link && project.link !== '#'"
+                    :href="project.link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="button primary project_button"
+                  >
+                    <svg
+                      class="project_button_icon"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                      <polyline points="15 3 21 3 21 9" />
+                      <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
+                    Live demo
+                  </a>
+                  <a
+                    v-if="project.github"
+                    :href="project.github"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="button ghost project_button"
+                  >
+                    <svg
+                      class="project_button_icon"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="16 18 22 12 16 6" />
+                      <polyline points="8 6 2 12 8 18" />
+                    </svg>
+                    Source code
+                  </a>
+                  <span
+                    v-else-if="project.link && project.link === '#'"
+                    class="button ghost project_button disabled"
+                  >
+                    Source available upon request
+                  </span>
                 </div>
               </div>
-              <p class="project_description">
-                {{
-                  projectDescExpanded[project.title]
-                    ? project.description
-                    : getProjectDescriptionPreview(project.description)
-                }}
-              </p>
-              <button
-                v-if="projectDescriptionNeedsExpand(project.description)"
-                type="button"
-                class="about_see_more project_see_more"
-                :aria-expanded="!!projectDescExpanded[project.title]"
-                @click="toggleProjectDescription(project.title)"
-              >
-                <span class="about_see_more_text">
-                  {{ projectDescExpanded[project.title] ? 'See less' : 'See more' }}
-                </span>
-                <span
-                  class="about_see_more_icon"
-                  :class="{ expanded: projectDescExpanded[project.title] }"
-                  aria-hidden="true"
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </span>
-              </button>
-              <p v-if="project.impact" class="project_impact">{{ project.impact }}</p>
-              <div
-                v-if="project.responsibilities && project.responsibilities.length"
-                class="project_responsibilities"
-              >
-                <p class="project_responsibilities_title"><strong>Responsibilities:</strong></p>
-                <ul class="project_responsibilities_list">
-                  <li v-for="(resp, idx) in project.responsibilities" :key="idx">{{ resp }}</li>
-                </ul>
-              </div>
-              <div class="project_tags">
-                <span v-for="tag in project.tags" :key="tag" class="project_tag">{{ tag }}</span>
-              </div>
-              <div class="project_buttons">
-                <a
-                  v-if="project.link && project.link !== '#'"
-                  :href="project.link"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="button primary project_button"
-                >
-                  <svg
-                    class="project_button_icon"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                    <polyline points="15 3 21 3 21 9" />
-                    <line x1="10" y1="14" x2="21" y2="3" />
-                  </svg>
-                  Live demo
-                </a>
-                <a
-                  v-if="project.github"
-                  :href="project.github"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="button ghost project_button"
-                >
-                  <svg
-                    class="project_button_icon"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <polyline points="16 18 22 12 16 6" />
-                    <polyline points="8 6 2 12 8 18" />
-                  </svg>
-                  Source code
-                </a>
-                <span
-                  v-else-if="project.link && project.link === '#'"
-                  class="button ghost project_button disabled"
-                >
-                  Source available upon request
-                </span>
-              </div>
-            </div>
-          </article>
-        </div>
-        <div v-if="projects.length > 2" class="projects_actions">
-          <button type="button" class="button ghost" @click="toggleProjects">
-            {{ showAllProjects ? 'View fewer projects' : 'View more projects' }}
-          </button>
-        </div>
+            </article>
+          </div>
+          <div v-if="projects.length > 2" class="projects_actions">
+            <button type="button" class="button ghost" @click="toggleProjects">
+              {{ showAllProjects ? 'View fewer projects' : 'View more projects' }}
+            </button>
+          </div>
         </div>
       </section>
 
       <section class="panel section-parallax-wrap" id="experience">
         <SectionParallaxDecor variant="experience" />
         <div class="section-parallax__inner">
-        <div class="panel_header">
-          <h2>Experience</h2>
-        </div>
-        <div class="experience" data-parallax-content="0.035">
-          <div class="timeline">
-            <div v-for="item in experience" :key="item.role" class="timeline_item">
-              <div class="timeline_dot" />
-              <div class="timeline_content">
-                <p class="eyebrow">{{ item.period }}</p>
-                <h4>{{ item.role }} — {{ item.company }}</h4>
-                <ul class="timeline_summaries">
-                  <li v-for="(summary, index) in item.summaries" :key="index" class="muted">
-                    {{ summary }}
-                  </li>
-                </ul>
+          <div class="panel_header">
+            <h2>Experience</h2>
+          </div>
+          <div class="experience" data-parallax-content="0.035">
+            <div class="timeline">
+              <div v-for="item in experience" :key="item.role" class="timeline_item">
+                <div class="timeline_dot" />
+                <div class="timeline_content">
+                  <p class="eyebrow">{{ item.period }}</p>
+                  <h4>{{ item.role }} — {{ item.company }}</h4>
+                  <ul class="timeline_summaries">
+                    <li v-for="(summary, index) in item.summaries" :key="index" class="muted">
+                      {{ summary }}
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </section>
 
       <section class="panel section-parallax-wrap" id="education">
         <SectionParallaxDecor variant="education" />
         <div class="section-parallax__inner">
-        <div class="panel_header">
-          <h2>Education</h2>
-        </div>
-        <div class="experience" data-parallax-content="0.035">
-          <div class="timeline">
-            <div v-for="item in education" :key="item.degree" class="timeline_item">
-              <div class="timeline_dot" />
-              <div class="timeline_content">
-                <p class="eyebrow">{{ item.year }}</p>
-                <h4>{{ item.degree }} | {{ item.school }}</h4>
+          <div class="panel_header">
+            <h2>Education</h2>
+          </div>
+          <div class="experience" data-parallax-content="0.035">
+            <div class="timeline">
+              <div v-for="item in education" :key="item.degree" class="timeline_item">
+                <div class="timeline_dot" />
+                <div class="timeline_content">
+                  <p class="eyebrow">{{ item.year }}</p>
+                  <h4>{{ item.degree }} | {{ item.school }}</h4>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </section>
 
       <section class="cta section-parallax-wrap section-parallax-wrap--contact" id="contact">
         <SectionParallaxDecor variant="contact" />
         <div class="section-parallax__inner">
-        <div class="contact_header">
-          <p class="eyebrow">Let's Make It Happen</p>
-          <h2>Have a project in mind?</h2>
-          <p class="intro-text">
-            I'm ready to help bring your project to life. Share your objectives and deadlines, and
-            we'll plan the best approach together.
-          </p>
-          <p class="availability">
-            <strong>Open to:</strong> Full-time opportunities • Freelance projects
-          </p>
-        </div>
-        <div class="contact_content" data-parallax-content="0.04">
-          <form class="contact_form" @submit.prevent="submitContactForm">
-            <div class="form_group">
-              <label for="name">Name</label>
-              <input
-                id="name"
-                type="text"
-                v-model="contactForm.name"
-                required
-                placeholder="Your name"
-                :disabled="isSubmitting"
-              />
-            </div>
-            <div class="form_group">
-              <label for="email">Email</label>
-              <input
-                id="email"
-                type="email"
-                v-model="contactForm.email"
-                required
-                placeholder="your.email@example.com"
-                :disabled="isSubmitting"
-              />
-            </div>
-            <div class="form_group">
-              <label for="message">Message</label>
-              <textarea
-                id="message"
-                v-model="contactForm.message"
-                required
-                rows="5"
-                placeholder="Tell me about your project..."
-                :disabled="isSubmitting"
-              ></textarea>
-            </div>
-            <div v-if="submitMessage" class="form_status" :class="submitStatus">
-              {{ submitMessage }}
-            </div>
-            <button
-              type="submit"
-              :disabled="isSubmitting"
-              class="button primary contact_submit"
-            >
-              {{ isSubmitting ? 'Sending...' : 'Send message' }}
-              <svg
-                v-if="!isSubmitting"
-                class="contact_submit_icon"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
+          <div class="contact_header">
+            <p class="eyebrow">Let's Make It Happen</p>
+            <h2>Have a project in mind?</h2>
+            <p class="intro-text">
+              I'm ready to help bring your project to life. Share your objectives and deadlines, and
+              we'll plan the best approach together.
+            </p>
+            <p class="availability">
+              <strong>Open to:</strong> Full-time opportunities • Freelance projects
+            </p>
+          </div>
+          <div class="contact_content" data-parallax-content="0.04">
+            <form class="contact_form" @submit.prevent="submitContactForm">
+              <div class="form_group">
+                <label for="name">Name</label>
+                <input
+                  id="name"
+                  type="text"
+                  v-model="contactForm.name"
+                  required
+                  placeholder="Your name"
+                  :disabled="isSubmitting"
+                />
+              </div>
+              <div class="form_group">
+                <label for="email">Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  v-model="contactForm.email"
+                  required
+                  placeholder="your.email@example.com"
+                  :disabled="isSubmitting"
+                />
+              </div>
+              <div class="form_group">
+                <label for="message">Message</label>
+                <textarea
+                  id="message"
+                  v-model="contactForm.message"
+                  required
+                  rows="5"
+                  placeholder="Tell me about your project..."
+                  :disabled="isSubmitting"
+                ></textarea>
+              </div>
+              <div
+                v-if="submitMessage"
+                class="form_status"
+                :class="submitStatus"
+                role="status"
+                aria-live="polite"
               >
-                <path d="M5 12h14" />
-                <path d="m13 6 6 6-6 6" />
-              </svg>
-            </button>
-          </form>
-          <div class="contact_social">
-            <h3>Connect with me</h3>
-            <div class="social_links">
-              <a
-                class="button ghost social_link"
-                href="https://linkedin.com/in/ebzacarias"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#0077b5">
-                  <path
-                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
-                  ></path>
+                {{ submitMessage }}
+              </div>
+              <button type="submit" :disabled="isSubmitting" class="button primary contact_submit">
+                {{ isSubmitting ? 'Sending...' : 'Send message' }}
+                <svg
+                  v-if="!isSubmitting"
+                  class="contact_submit_icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m13 6 6 6-6 6" />
                 </svg>
-                <span>LinkedIn</span>
-              </a>
-              <a
-                class="button ghost social_link"
-                href="https://github.com/ElijahZacarias02"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path
-                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-                  ></path>
-                </svg>
-                <span>GitHub</span>
-              </a>
+              </button>
+            </form>
+            <div class="contact_social">
+              <h3>Connect with me</h3>
+              <div class="social_links">
+                <a
+                  class="button ghost social_link"
+                  href="https://linkedin.com/in/ebzacarias"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#0077b5">
+                    <path
+                      d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                    ></path>
+                  </svg>
+                  <span>LinkedIn</span>
+                </a>
+                <a
+                  class="button ghost social_link"
+                  href="https://github.com/ElijahZacarias02"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path :d="githubIconPath"></path>
+                  </svg>
+                  <span>GitHub</span>
+                </a>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </section>
     </main>
@@ -1087,7 +1232,7 @@ onBeforeUnmount(() => {
             class="footer_link"
             href="https://linkedin.com/in/ebzacarias"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             aria-label="LinkedIn"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -1100,13 +1245,11 @@ onBeforeUnmount(() => {
             class="footer_link"
             href="https://github.com/ElijahZacarias02"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             aria-label="GitHub"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-              ></path>
+              <path :d="githubIconPath"></path>
             </svg>
           </a>
         </div>
